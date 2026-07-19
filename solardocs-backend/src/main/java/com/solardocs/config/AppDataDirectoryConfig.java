@@ -48,11 +48,12 @@ public class AppDataDirectoryConfig {
     public Path reportsDir() { return root().resolve("Reports"); }
     public Path backupDir() { return root().resolve("Backup"); }
     public Path logsDir() { return root().resolve("Logs"); }
+    public Path masterDataDir() { return root().resolve("MasterData"); }
 
     @PostConstruct
     public void ensureFolders() throws IOException {
         for (Path p : new Path[]{ root(), configDir(), indexesDir(), customersDir(),
-                templatesDir(), reportsDir(), backupDir(), logsDir() }) {
+                templatesDir(), reportsDir(), backupDir(), logsDir(), masterDataDir() }) {
             Files.createDirectories(p);
         }
         Path configFile = configDir().resolve("config.json");
@@ -75,6 +76,7 @@ public class AppDataDirectoryConfig {
 
         seedDefaultTemplatesIfMissing();
         seedDefaultProductCatalogIfMissing();
+        seedDefaultProductCategoriesIfMissing();
     }
 
     /**
@@ -105,6 +107,21 @@ public class AppDataDirectoryConfig {
             return;
         }
         copyClasspathResource("default-config/product-catalog.json", catalogFile);
+    }
+
+    /**
+     * Seeds a starter set of product categories (Solar Panel, Inverter,
+     * Mounting Structure, ...) only if MasterData/categories.json doesn't
+     * exist yet - same "never clobber an existing file" rule as the two
+     * seed methods above, since a vendor may have already renamed or
+     * deleted from the starter list via Settings.
+     */
+    private void seedDefaultProductCategoriesIfMissing() throws IOException {
+        Path categoriesFile = masterDataDir().resolve("categories.json");
+        if (Files.exists(categoriesFile)) {
+            return;
+        }
+        copyClasspathResource("default-config/categories.json", categoriesFile);
     }
 
     private void copyClasspathResource(String classpathLocation, Path target) throws IOException {

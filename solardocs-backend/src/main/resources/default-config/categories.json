@@ -1,0 +1,83 @@
+[
+  {
+    "id": "717aee23-f881-4235-b58a-eee730f53a8a",
+    "categoryCode": "CAT-0001",
+    "categoryName": "Solar Panel",
+    "description": "Solar PV Modules",
+    "active": true,
+    "createdAt": "2026-07-19T12:44:31.252Z",
+    "updatedAt": "2026-07-19T12:44:31.252Z"
+  },
+  {
+    "id": "b4541764-2afb-42c5-8476-8c8a426d11b1",
+    "categoryCode": "CAT-0002",
+    "categoryName": "Inverter",
+    "description": "On-grid and hybrid inverters",
+    "active": true,
+    "createdAt": "2026-07-19T12:44:31.252Z",
+    "updatedAt": "2026-07-19T12:44:31.252Z"
+  },
+  {
+    "id": "de0e0660-9000-49ed-999d-43de7891e514",
+    "categoryCode": "CAT-0003",
+    "categoryName": "Mounting Structure",
+    "description": "Roof and ground mounting structures",
+    "active": true,
+    "createdAt": "2026-07-19T12:44:31.252Z",
+    "updatedAt": "2026-07-19T12:44:31.252Z"
+  },
+  {
+    "id": "ba8591c0-ff31-4007-ae6b-bbe3fe50d001",
+    "categoryCode": "CAT-0004",
+    "categoryName": "Cable",
+    "description": "DC and AC cabling",
+    "active": true,
+    "createdAt": "2026-07-19T12:44:31.252Z",
+    "updatedAt": "2026-07-19T12:44:31.252Z"
+  },
+  {
+    "id": "8c2bedd3-b8c1-4e0c-b3f3-8af5dbb1bda2",
+    "categoryCode": "CAT-0005",
+    "categoryName": "Protection",
+    "description": "Surge protection devices, MCB, breakers",
+    "active": true,
+    "createdAt": "2026-07-19T12:44:31.252Z",
+    "updatedAt": "2026-07-19T12:44:31.252Z"
+  },
+  {
+    "id": "ac53ed8f-abe7-4b39-ae87-79362bf2ab5d",
+    "categoryCode": "CAT-0006",
+    "categoryName": "Earthing",
+    "description": "Earthing kits and accessories",
+    "active": true,
+    "createdAt": "2026-07-19T12:44:31.252Z",
+    "updatedAt": "2026-07-19T12:44:31.252Z"
+  },
+  {
+    "id": "a3f4e4ca-b80d-419c-b447-c40e8b110555",
+    "categoryCode": "CAT-0007",
+    "categoryName": "Accessories",
+    "description": "Clamps, connectors, and other accessories",
+    "active": true,
+    "createdAt": "2026-07-19T12:44:31.252Z",
+    "updatedAt": "2026-07-19T12:44:31.252Z"
+  },
+  {
+    "id": "df6b5706-211f-470b-a465-e66220c6c893",
+    "categoryCode": "CAT-0008",
+    "categoryName": "Battery",
+    "description": "Storage batteries for hybrid systems",
+    "active": true,
+    "createdAt": "2026-07-19T12:44:31.252Z",
+    "updatedAt": "2026-07-19T12:44:31.252Z"
+  },
+  {
+    "id": "d10eef0e-72f5-499f-9539-79ed1855356e",
+    "categoryCode": "CAT-0009",
+    "categoryName": "Service",
+    "description": "Installation, commissioning, and maintenance services",
+    "active": true,
+    "createdAt": "2026-07-19T12:44:31.252Z",
+    "updatedAt": "2026-07-19T12:44:31.252Z"
+  }
+]
