@@ -39,3 +39,54 @@
     <button mat-raised-button color="primary" type="submit">{{ 'common.save' | translate }}</button>
   </form>
 </div>
+
+<div class="settings-section">
+  <h3>Product Catalog</h3>
+  <p class="settings-hint">
+    These products are used to prefill line items when generating a Quotation or Invoice.
+    Edit the price list here whenever your rates change.
+  </p>
+
+  <form [formGroup]="productForm" (ngSubmit)="saveCatalog()" class="product-catalog-form">
+    <div formArrayName="products">
+      <div *ngFor="let product of products.controls; let i = index" [formGroupName]="i" class="product-row">
+        <mat-form-field appearance="outline" class="product-field product-field-code">
+          <mat-label>Code</mat-label>
+          <input matInput formControlName="code" placeholder="MOD-550-DCR">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="product-field product-field-name">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" placeholder="550W DCR Adani Topcon Bifacial PERC">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="product-field">
+          <mat-label>Type</mat-label>
+          <input matInput formControlName="type" placeholder="Solar PV Module">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="product-field product-field-small">
+          <mat-label>Unit</mat-label>
+          <input matInput formControlName="unit" placeholder="W">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="product-field product-field-small">
+          <mat-label>Rate</mat-label>
+          <input matInput type="number" formControlName="defaultRate" placeholder="16200">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="product-field product-field-small">
+          <mat-label>GST</mat-label>
+          <input matInput formControlName="defaultGstPercent" placeholder="5%">
+        </mat-form-field>
+        <button mat-icon-button color="warn" type="button" (click)="removeProduct(i)" title="Remove product">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="product-catalog-actions">
+      <button mat-stroked-button type="button" (click)="addProduct()">
+        <mat-icon>add</mat-icon> Add Product
+      </button>
+      <button mat-raised-button color="primary" type="submit">
+        Save Catalog
+      </button>
+    </div>
+  </form>
+</div>

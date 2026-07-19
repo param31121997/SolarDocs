@@ -1,0 +1,55 @@
+<div class="wizard-overlay">
+  <mat-card class="wizard-card">
+    <mat-card-header>
+      <mat-card-title>Welcome to SolarDocs</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <ng-container *ngIf="!isSaved()">
+        <p>
+          Choose the folder where SolarDocs should keep all your data -
+          customers, uploaded documents, generated PDFs, backups, and
+          settings. Pick a location you'll always have access to
+          (a local drive, or a synced folder like OneDrive/Google Drive
+          if you back up that way).
+        </p>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Data folder path</mat-label>
+          <input matInput [(ngModel)]="chosenPath" placeholder="D:\SolarDocsData">
+          <mat-hint>Folder will be created automatically if it doesn't exist</mat-hint>
+        </mat-form-field>
+
+        <button mat-stroked-button (click)="useDefault()" class="use-default-btn" type="button">
+          Use default ({{ currentDefault() }})
+        </button>
+
+        <div *ngIf="errorMessage()" class="wizard-error">
+          <mat-icon>error</mat-icon>
+          <span>{{ errorMessage() }}</span>
+        </div>
+
+        <div class="wizard-actions">
+          <button mat-raised-button color="primary" (click)="save()" [disabled]="isSaving()">
+            <mat-spinner *ngIf="isSaving()" diameter="18" class="btn-spinner"></mat-spinner>
+            <span *ngIf="!isSaving()">Save and Continue</span>
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="isSaved()">
+        <div class="wizard-success">
+          <mat-icon>check_circle</mat-icon>
+          <div>
+            <p><strong>Data folder saved.</strong></p>
+            <p>
+              Please restart SolarDocs (stop and start the backend again) for
+              this to take effect. Once restarted, the app will open normally
+              and use this folder from now on.
+            </p>
+          </div>
+        </div>
+      </ng-container>
+    </mat-card-content>
+  </mat-card>
+</div>

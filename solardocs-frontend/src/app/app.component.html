@@ -1,3 +1,5 @@
+<app-first-run-wizard *ngIf="needsSetup() === true" (saved)="onDataDirectorySaved()"></app-first-run-wizard>
+
 <mat-toolbar color="primary" class="app-toolbar">
   <span class="app-title">{{ 'app.title' | translate }}</span>
   <span class="spacer"></span>

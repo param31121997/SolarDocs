@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: 'DejaVu Sans', sans-serif; font-size: 12px; line-height: 1.6; }
+    h1 { text-align: center; font-size: 15px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    td { padding: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Declaration of Domestic Content Requirement (DCR) Compliance</h1>
+  <p>Date: <span th:text="${date}"></span></p>
+  <p>This is to certify that the solar PV modules being supplied and installed for the
+     Rooftop Solar (RTS) project of <b th:text="${consumerName}"></b>
+     (Application No: <span th:text="${applicationNumber}"></span>,
+     Plant Capacity: <span th:text="${plantCapacityKw}"></span> kW) are DCR-compliant
+     and sourced from a manufacturer listed on the Approved List of Models and
+     Manufacturers (ALMM), as required under the PM Surya Ghar: Muft Bijli Yojana guidelines.</p>
+  <table>
+    <tr><td><b>Module Make:</b></td><td th:text="${moduleMake}"></td></tr>
+    <tr><td><b>Module Model:</b></td><td th:text="${moduleModel}"></td></tr>
+    <tr><td><b>ALMM Listing Reference:</b></td><td th:text="${almmListingRef}"></td></tr>
+    <tr><td><b>Declared By (Vendor):</b></td><td th:text="${vendorCompanyName}"></td></tr>
+  </table>
+  <p style="margin-top:60px;">Authorized Signatory: ___________________________</p>
+</body>
+</html>

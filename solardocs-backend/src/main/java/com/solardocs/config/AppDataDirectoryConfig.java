@@ -2,14 +2,37 @@ package com.solardocs.config;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 @Component
 public class AppDataDirectoryConfig {
+
+    /**
+     * Default PDF templates (registry + HTML files) bundled inside the
+     * jar at src/main/resources/default-templates/. Copied into
+     * Templates/ the first time a data directory doesn't already have
+     * its own registry - this is what makes a brand-new data directory
+     * (a first-run install, or a folder picked in the setup wizard)
+     * immediately work with Generate Document instead of showing
+     * "No templates available" until someone manually copies files in.
+     */
+    private static final String[] DEFAULT_TEMPLATE_FILES = {
+            "templates-registry.json",
+            "quotation-v1.html",
+            "invoice-v1.html",
+            "agreement-v1.html",
+            "dcr-declaration-v1.html",
+            "annexure1-v1.html",
+            "net-meter-agreement-v1.html",
+            "commissioning-report-v1.html"
+    };
 
     private final String dataDir;
 
@@ -48,6 +71,46 @@ public class AppDataDirectoryConfig {
         Path indexFile = indexesDir().resolve("customers-index.json");
         if (Files.notExists(indexFile)) {
             Files.writeString(indexFile, "{\"lastUpdated\": null, \"customers\": []}");
+        }
+
+        seedDefaultTemplatesIfMissing();
+        seedDefaultProductCatalogIfMissing();
+    }
+
+    /**
+     * Copies the bundled default templates into Templates/ only if this
+     * data directory doesn't already have its own templates-registry.json.
+     * A vendor who has customized their templates is never overwritten -
+     * this only fires on a genuinely empty/fresh Templates/ folder.
+     */
+    private void seedDefaultTemplatesIfMissing() throws IOException {
+        Path registryFile = templatesDir().resolve("templates-registry.json");
+        if (Files.exists(registryFile)) {
+            return;
+        }
+        for (String fileName : DEFAULT_TEMPLATE_FILES) {
+            copyClasspathResource("default-templates/" + fileName, templatesDir().resolve(fileName));
+        }
+    }
+
+    /**
+     * Same idea for the product catalog used to prefill quotation/invoice
+     * line items - only seeded if Config/product-catalog.json doesn't
+     * exist yet, so it never clobbers a catalog a vendor has already
+     * edited via Settings.
+     */
+    private void seedDefaultProductCatalogIfMissing() throws IOException {
+        Path catalogFile = configDir().resolve("product-catalog.json");
+        if (Files.exists(catalogFile)) {
+            return;
+        }
+        copyClasspathResource("default-config/product-catalog.json", catalogFile);
+    }
+
+    private void copyClasspathResource(String classpathLocation, Path target) throws IOException {
+        ClassPathResource resource = new ClassPathResource(classpathLocation);
+        try (InputStream in = resource.getInputStream()) {
+            Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
         }
     }
 }

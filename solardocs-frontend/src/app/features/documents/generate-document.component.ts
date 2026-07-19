@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, inject, input, OnInit, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,6 +11,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { DocumentService } from '../../core/services/document.service';
+import { ProductCatalogService, Product } from '../../core/services/product-catalog.service';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
 
 @Component({
@@ -27,6 +28,7 @@ import { TranslatePipe } from '../../core/i18n/translate.pipe';
 export class GenerateDocumentComponent implements OnInit {
   customerId = input.required<string>();
   private docService = inject(DocumentService);
+  private productCatalogService = inject(ProductCatalogService);
   private snackBar = inject(MatSnackBar);
   private fb = inject(FormBuilder);
 
@@ -37,11 +39,102 @@ export class GenerateDocumentComponent implements OnInit {
   isLoading = signal(false);
   isLoadingTemplates = signal(true);
   error = signal<string | null>(null);
-  displayedColumns = ['slNo', 'item', 'type', 'qty', 'unit', 'rate', 'gstPercent', 'amount', 'actions'];
+  displayedColumns = ['slNo', 'product', 'item', 'type', 'qty', 'unit', 'rate', 'gstPercent', 'amount', 'actions'];
+
+  catalog = signal<Product[]>([]);
+  isLoadingCatalog = signal(true);
+  private catalogAutoPopulated = false;
+
+  constructor() {
+    // Whenever both the catalog and a QUOTATION/INVOICE template selection
+    // are available, and the line-item table is still in its untouched
+    // default state, prefill it from the vendor's product catalog. This
+    // only fires once per visit (catalogAutoPopulated) so it never
+    // clobbers edits the vendor has already started making - after that,
+    // "Load from Catalog" (added to the template) is there to re-run it
+    // on demand.
+    effect(() => {
+      const template = this.selectedTemplate();
+      const products = this.catalog();
+      const isQuotationLike = template === 'QUOTATION' || template === 'INVOICE';
+
+      if (isQuotationLike && products.length > 0 && !this.catalogAutoPopulated && this.isDefaultLineItemsState()) {
+        this.loadFromCatalog();
+        this.catalogAutoPopulated = true;
+      }
+    });
+  }
 
   ngOnInit(): void {
     console.log('GenerateDocumentComponent initialized for customer:', this.customerId());
     this.loadTemplates();
+    this.loadCatalog();
+  }
+
+  loadCatalog() {
+    this.isLoadingCatalog.set(true);
+    this.productCatalogService.list().subscribe({
+      next: (products) => {
+        console.log('Product catalog loaded:', products);
+        this.catalog.set(products || []);
+        this.isLoadingCatalog.set(false);
+      },
+      error: (err) => {
+        // Catalog is a convenience prefill, not a hard requirement - a
+        // failure here should not block manual document generation.
+        console.warn('Failed to load product catalog, falling back to manual entry:', err);
+        this.catalog.set([]);
+        this.isLoadingCatalog.set(false);
+      }
+    });
+  }
+
+  /** True while the table still holds only the single, never-edited blank row. */
+  private isDefaultLineItemsState(): boolean {
+    const items = this.lineItems();
+    return items.length === 1 && !items[0].item && !items[0].qty && !items[0].rate;
+  }
+
+  /** Replaces the line-item table with one row per catalog product (rate/type/unit prefilled, quantity left blank for the vendor to fill in). */
+  loadFromCatalog() {
+    const products = this.catalog();
+    if (products.length === 0) {
+      this.snackBar.open('Product catalog is empty. Add products in Settings first.', 'Close', { duration: 4000 });
+      return;
+    }
+    this.lineItems.set(products.map((p, idx) => ({
+      slNo: idx + 1,
+      productCode: p.code,
+      item: p.name,
+      type: p.type,
+      qty: '',
+      unit: p.unit,
+      rate: p.defaultRate,
+      gstPercent: p.defaultGstPercent,
+      amount: 0
+    })));
+  }
+
+  /** Applies a catalog product's defaults onto one existing row, keeping any quantity the vendor already typed. */
+  applyProduct(index: number, code: string) {
+    const product = this.catalog().find(p => p.code === code);
+    if (!product) {
+      return;
+    }
+    this.lineItems.update(items => {
+      const updated = [...items];
+      updated[index] = {
+        ...updated[index],
+        productCode: product.code,
+        item: product.name,
+        type: product.type,
+        unit: product.unit,
+        rate: product.defaultRate,
+        gstPercent: product.defaultGstPercent
+      };
+      return updated;
+    });
+    this.updateAmount(index);
   }
 
   loadTemplates() {
@@ -84,6 +177,7 @@ export class GenerateDocumentComponent implements OnInit {
     this.lineItems.update(items => {
       const newLine = {
         slNo: items.length + 1,
+        productCode: '',
         item: '',
         type: '',
         qty: '',

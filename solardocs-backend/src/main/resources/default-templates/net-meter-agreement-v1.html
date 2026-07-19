@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: 'DejaVu Sans', sans-serif; font-size: 12px; line-height: 1.6; }
+    h1 { text-align: center; font-size: 15px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    td { padding: 4px; border: 1px solid #333; }
+  </style>
+</head>
+<body>
+  <h1>Net Meter Agreement</h1>
+  <p>Date: <span th:text="${date}"></span></p>
+  <table>
+    <tr><td><b>Consumer Name</b></td><td th:text="${consumerName}"></td></tr>
+    <tr><td><b>Consumer Number</b></td><td th:text="${consumerNumber}"></td></tr>
+    <tr><td><b>Application Number</b></td><td th:text="${applicationNumber}"></td></tr>
+    <tr><td><b>DISCOM</b></td><td th:text="${discom}"></td></tr>
+    <tr><td><b>Plant Capacity (kW)</b></td><td th:text="${plantCapacityKw}"></td></tr>
+    <tr><td><b>Net Meter Serial No.</b></td><td th:text="${netMeterSerialNo}"></td></tr>
+  </table>
+  <!-- Transcribe the exact clause text from your DISCOM's official net-meter agreement here -->
+  <p style="margin-top:60px;">Signature of Consumer: ___________________________&nbsp;&nbsp;&nbsp;&nbsp;Signature of DISCOM Representative: ___________________________</p>
+</body>
+</html>

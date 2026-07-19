@@ -45,7 +45,7 @@
 
 .line-items-table {
   width: 100%;
-  min-width: 960px;
+  min-width: 1120px;
 }
 
 .line-items-table th,
@@ -64,12 +64,26 @@
   min-width: 120px;
 }
 
+.cell-select {
+  width: 190px;
+  min-width: 160px;
+}
+
 .amount-cell {
   font-weight: 600;
 }
 
-.add-line-btn {
+.line-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.catalog-empty-hint {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
 }
 
 .generate-actions {
