@@ -1,0 +1,25 @@
+<section class="license-page">
+  <h2>{{ 'license.title' | translate }}</h2>
+  <div class="license-grid">
+    <mat-card>
+      <mat-card-header><mat-card-title>License status</mat-card-title></mat-card-header>
+      <mat-card-content>
+        <p *ngIf="status() as s">
+          {{ 'license.status' | translate }}:
+          <b>{{ s.status === 'ACTIVE' ? ('license.active' | translate) : s.status === 'NOT_ACTIVATED' ? ('license.notActivated' | translate) : ('license.expired' | translate) }}</b>
+        </p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header><mat-card-title>Activate license</mat-card-title></mat-card-header>
+      <mat-card-content class="activation-form">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'license.enterKey' | translate }}</mat-label>
+          <input matInput [(ngModel)]="licenseKey">
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="activate()">{{ 'license.activate' | translate }}</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</section>

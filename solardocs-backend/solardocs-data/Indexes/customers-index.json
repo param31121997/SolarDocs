@@ -1,0 +1,34 @@
+{
+  "lastUpdated" : "2026-07-19T09:20:31.776446200Z",
+  "customers" : [ {
+    "customerId" : "A00002",
+    "name" : "Aniket Wankhede",
+    "mobile" : "9922447251",
+    "status" : "LEAD",
+    "folderPath" : "A00002-Aniket Wankhede",
+    "village" : "wakad",
+    "district" : null,
+    "consumerNumber" : null,
+    "applicationNumber" : null
+  }, {
+    "customerId" : "A00001",
+    "name" : "Parameshwar Wankhede",
+    "mobile" : "9689533634",
+    "status" : "SUBSIDY_RECEIVED",
+    "folderPath" : "A00001-Parameshwar Wankhede",
+    "village" : "Pune",
+    "district" : "Washim",
+    "consumerNumber" : null,
+    "applicationNumber" : null
+  }, {
+    "customerId" : "A00003",
+    "name" : "Chinmay Jayant Ansignkar",
+    "mobile" : "9767991833",
+    "status" : "LEAD",
+    "folderPath" : "A00003-Chinmay Jayant Ansignkar",
+    "village" : "Pune",
+    "district" : "Washim",
+    "consumerNumber" : null,
+    "applicationNumber" : null
+  } ]
+}

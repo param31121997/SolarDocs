@@ -1,0 +1,25 @@
+<section class="backup-page">
+  <h2>{{ 'backup.title' | translate }}</h2>
+  <div class="backup-grid">
+    <mat-card>
+      <mat-card-header><mat-card-title>Create backup</mat-card-title></mat-card-header>
+      <mat-card-content>
+        <p>Create a local ZIP backup of customers, documents, settings, and templates.</p>
+        <button mat-raised-button color="primary" (click)="create()">{{ 'backup.createBackup' | translate }}</button>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header><mat-card-title>{{ 'backup.availableBackups' | translate }}</mat-card-title></mat-card-header>
+      <mat-card-content>
+        <p class="empty" *ngIf="backups().length === 0">No backups created yet.</p>
+        <mat-nav-list *ngIf="backups().length > 0">
+          <mat-list-item *ngFor="let b of backups()">
+            <span matListItemTitle>{{ b }}</span>
+            <button mat-button (click)="restore(b)">{{ 'backup.restore' | translate }}</button>
+          </mat-list-item>
+        </mat-nav-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</section>

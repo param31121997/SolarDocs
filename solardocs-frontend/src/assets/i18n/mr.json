@@ -1,0 +1,84 @@
+{
+  "app": { "title": "सोलरडॉक्स", "tagline": "सौर स्थापना विक्रेता व्यवस्थापन" },
+  "nav": {
+    "dashboard": "डॅशबोर्ड",
+    "customers": "ग्राहक",
+    "documents": "कागदपत्रे",
+    "reports": "अहवाल",
+    "settings": "सेटिंग्ज",
+    "backup": "बॅकअप",
+    "license": "परवाना"
+  },
+  "language": { "label": "भाषा", "en": "English (इंग्रजी)", "hi": "हिन्दी (हिंदी)", "mr": "मराठी" },
+  "common": {
+    "save": "जतन करा", "cancel": "रद्द करा", "delete": "काढून टाका", "edit": "संपादित करा",
+    "search": "शोधा", "create": "तयार करा", "update": "अद्ययावत करा", "close": "बंद करा",
+    "yes": "होय", "no": "नाही", "loading": "लोड होत आहे...", "actions": "क्रिया",
+    "open": "उघडा", "back": "मागे", "download": "डाउनलोड", "upload": "अपलोड",
+    "generate": "तयार करा", "confirm": "पुष्टी करा", "required": "आवश्यक"
+  },
+  "customer": {
+    "title": "ग्राहक", "new": "नवीन ग्राहक", "id": "ग्राहक आयडी", "name": "नाव",
+    "mobile": "मोबाइल", "alternateMobile": "पर्यायी मोबाइल", "address": "पत्ता",
+    "addressLine": "पत्ता तपशील", "village": "गाव", "district": "जिल्हा",
+    "state": "राज्य", "pincode": "पिनकोड", "consumerNumber": "ग्राहक क्रमांक",
+    "applicationNumber": "अर्ज क्रमांक", "sanctionedLoad": "मंजूर भार (kW)",
+    "plantCapacity": "प्लांट क्षमता (kW)", "discom": "डिस्कॉम", "category": "प्रकार",
+    "residential": "निवासी", "commercial": "व्यावसायिक", "statusLabel": "स्थिती",
+    "searchPlaceholder": "नाव, आयडी, मोबाइल, ग्राहक क्रमांकाने शोधा",
+    "createdAt": "तयार केले", "updatedAt": "शेवटचे अद्ययावत",
+    "overview": "आढावा", "documentsTab": "कागदपत्रे", "generatedPdfs": "तयार केलेले PDF", "notes": "टिपा",
+    "status": {
+      "LEAD": "लीड", "QUOTATION_SENT": "कोटेशन पाठवले", "AGREEMENT_SIGNED": "करार स्वाक्षरीत",
+      "DOCUMENTS_COLLECTED": "कागदपत्रे जमा केली", "INSTALLATION_IN_PROGRESS": "बसवणी सुरू आहे",
+      "COMMISSIONED": "कार्यान्वित", "SUBSIDY_APPLIED": "अनुदानासाठी अर्ज केला",
+      "SUBSIDY_RECEIVED": "अनुदान मिळाले", "CLOSED": "बंद"
+    }
+  },
+  "document": {
+    "title": "कागदपत्रे", "type": "कागदपत्र प्रकार", "chooseFile": "फाईल निवडा",
+    "uploadedOn": "अपलोड तारीख", "generateDocument": "कागदपत्र तयार करा",
+    "templateType": "टेम्पलेट", "billNo": "बिल क्रमांक", "lineItems": "लाईन आयटम",
+    "item": "वस्तू", "itemType": "प्रकार", "qty": "प्रमाण", "unit": "एकक", "rate": "दर",
+    "gst": "जीएसटी %", "amount": "रक्कम", "addLine": "लाईन जोडा", "total": "एकूण",
+    "amountInWords": "शब्दांत रक्कम", "bankDetails": "बँक तपशील",
+    "templates": {
+      "QUOTATION": "सोलर कोटेशन", "INVOICE": "इनव्हॉइस",
+      "AGREEMENT": "ग्राहक-विक्रेता करार", "DCR_DECLARATION": "DCR घोषणापत्र",
+      "ANNEXURE_I": "परिशिष्ट-I", "NET_METER_AGREEMENT": "नेट मीटर करार",
+      "COMMISSIONING_REPORT": "कमिशनिंग अहवाल"
+    },
+    "types": {
+      "AADHAAR": "आधार कार्ड", "PAN": "पॅन कार्ड", "ELECTRICITY_BILL": "वीज बिल",
+      "SANCTION_LETTER": "मंजुरी पत्र", "MODULE_DATASHEET": "मॉड्युल डेटाशीट",
+      "INVERTER_DATASHEET": "इन्व्हर्टर डेटाशीट", "SITE_PHOTO_BEFORE": "साईट फोटो - आधी",
+      "SITE_PHOTO_AFTER": "साईट फोटो - नंतर", "CUSTOMER_SIGNATURE": "ग्राहक स्वाक्षरी"
+    }
+  },
+  "dashboard": {
+    "title": "डॅशबोर्ड", "totalCustomers": "एकूण ग्राहक",
+    "pendingDocuments": "प्रलंबित कागदपत्रे", "commissioned": "कार्यान्वित",
+    "statusBreakdown": "स्थिती तपशील"
+  },
+  "reports": { "title": "अहवाल", "exportCsv": "ग्राहक यादी निर्यात करा (CSV)" },
+  "settings": {
+    "title": "सेटिंग्ज", "vendorProfile": "विक्रेता प्रोफाइल", "companyName": "कंपनीचे नाव",
+    "gstin": "जीएसटीआयएन", "registeredAddress": "नोंदणीकृत पत्ता", "bankAccountName": "बँक खाते नाव",
+    "bankAccountNumber": "बँक खाते क्रमांक", "bankIfsc": "बँक आयएफएससी", "signatoryName": "स्वाक्षरीकर्त्याचे नाव",
+    "productCatalog": "उत्पादन यादी", "documentTypes": "कागदपत्र प्रकार"
+  },
+  "license": {
+    "title": "परवाना सक्रियकरण", "enterKey": "तुमची परवाना की टाका",
+    "activate": "सक्रिय करा", "status": "परवाना स्थिती", "active": "सक्रिय",
+    "notActivated": "सक्रिय नाही", "expired": "कालबाह्य किंवा अवैध"
+  },
+  "backup": {
+    "title": "बॅकअप आणि पुनर्स्थापना", "createBackup": "बॅकअप तयार करा", "restore": "पुनर्स्थापित करा",
+    "availableBackups": "उपलब्ध बॅकअप", "confirmRestore": "पुनर्स्थापना केल्याने सध्याचा डेटा अधिलिखित होईल. सुरू ठेवायचे?"
+  },
+  "setup": {
+    "title": "सोलरडॉक्समध्ये आपले स्वागत आहे", "chooseFolder": "डेटा फोल्डर निवडा",
+    "explainer": "येथे तुमचा सर्व ग्राहक डेटा, PDF आणि बॅकअप साठवले जातील.",
+    "continue": "पुढे जा"
+  }
+}

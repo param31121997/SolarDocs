@@ -1,0 +1,45 @@
+<section class="customer-detail" *ngIf="customer() as c">
+  <div class="customer-header">
+    <h2>{{ c.name }} <small>({{ c.customerId }})</small></h2>
+    <div class="customer-actions">
+      <mat-form-field appearance="outline" class="status-select">
+        <mat-label>Status</mat-label>
+        <mat-select [value]="c.status" (selectionChange)="updateStatus($event.value)">
+          <mat-option *ngFor="let status of statuses" [value]="status">
+            {{ 'customer.status.' + status | translate }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-stroked-button color="primary" type="button" (click)="editCustomer()">Edit Customer</button>
+    </div>
+  </div>
+
+  <mat-tab-group>
+    <mat-tab [label]="'customer.overview' | translate">
+      <div class="tab-content">
+        <p><b>{{ 'customer.mobile' | translate }}:</b> {{ c.mobile }}</p>
+        <p><b>{{ 'customer.address' | translate }}:</b> {{ c.addressLine }}, {{ c.village }}, {{ c.district }}, {{ c.state }} - {{ c.pincode }}</p>
+        <p><b>{{ 'customer.consumerNumber' | translate }}:</b> {{ c.consumerNumber }}</p>
+        <p><b>{{ 'customer.applicationNumber' | translate }}:</b> {{ c.applicationNumber }}</p>
+        <p><b>{{ 'customer.plantCapacity' | translate }}:</b> {{ c.plantCapacityKw }}</p>
+        <p><b>{{ 'customer.statusLabel' | translate }}:</b> {{ 'customer.status.' + c.status | translate }}</p>
+      </div>
+    </mat-tab>
+
+    <mat-tab [label]="'customer.documentsTab' | translate">
+      <div class="tab-content">
+        <app-customer-documents [customerId]="c.customerId"></app-customer-documents>
+      </div>
+    </mat-tab>
+
+    <mat-tab [label]="'customer.generatedPdfs' | translate">
+      <div class="tab-content">
+        <app-generate-document [customerId]="c.customerId"></app-generate-document>
+      </div>
+    </mat-tab>
+
+    <mat-tab [label]="'customer.notes' | translate">
+      <div class="tab-content"></div>
+    </mat-tab>
+  </mat-tab-group>
+</section>

@@ -1,0 +1,154 @@
+<div class="document-container">
+  <mat-card class="document-card">
+    <mat-card-header>
+      <mat-card-title>{{ 'document.generateDocument' | translate }}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content *ngIf="!isLoading()">
+      <!-- Error Message Display -->
+      <div *ngIf="error()" class="error-message">
+        <mat-icon>error</mat-icon>
+        <div class="error-content">
+          <p>{{ error() }}</p>
+          <button mat-stroked-button color="primary" (click)="retryLoadTemplates()" *ngIf="isLoadingTemplates()">
+            <mat-icon>refresh</mat-icon> {{ 'common.retry' | translate }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Templates Loading State -->
+      <div *ngIf="isLoadingTemplates()" class="loading-templates">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>{{ 'common.loading' | translate }} templates...</p>
+      </div>
+
+      <!-- Template Selection Form -->
+      <div *ngIf="!isLoadingTemplates()" class="form-section">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'document.templateType' | translate }} *</mat-label>
+          <mat-select [value]="selectedTemplate()" (selectionChange)="selectedTemplate.set($event.value)">
+            <mat-option disabled>Choose a template</mat-option>
+            <mat-option *ngFor="let t of templates()" [value]="t.code">
+              {{ 'document.templates.' + t.code | translate }}
+            </mat-option>
+          </mat-select>
+          <mat-hint *ngIf="templates().length === 0">No templates available</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <!-- Line Items Section (for QUOTATION and INVOICE) -->
+      <div *ngIf="(selectedTemplate() === 'QUOTATION' || selectedTemplate() === 'INVOICE')" class="table-section">
+        <h3>{{ 'document.lineItems' | translate }}</h3>
+        
+        <div class="table-wrapper">
+          <table mat-table [dataSource]="lineItems()" class="line-items-table">
+            <!-- Serial No Column -->
+            <ng-container matColumnDef="slNo">
+              <th mat-header-cell *matHeaderCellDef>#</th>
+              <td mat-cell *matCellDef="let l">{{ l.slNo }}</td>
+            </ng-container>
+
+            <!-- Item Column -->
+            <ng-container matColumnDef="item">
+              <th mat-header-cell *matHeaderCellDef>{{ 'document.item' | translate }}</th>
+              <td mat-cell *matCellDef="let l; let idx = index">
+                <input matInput placeholder="Item name" [(ngModel)]="l.item" class="cell-input">
+              </td>
+            </ng-container>
+
+            <!-- Type Column -->
+            <ng-container matColumnDef="type">
+              <th mat-header-cell *matHeaderCellDef>{{ 'document.itemType' | translate }}</th>
+              <td mat-cell *matCellDef="let l; let idx = index">
+                <input matInput placeholder="e.g., Solar Panel" [(ngModel)]="l.type" class="cell-input">
+              </td>
+            </ng-container>
+
+            <!-- Quantity Column -->
+            <ng-container matColumnDef="qty">
+              <th mat-header-cell *matHeaderCellDef>{{ 'document.qty' | translate }}</th>
+              <td mat-cell *matCellDef="let l; let idx = index">
+                <input matInput type="number" placeholder="0" [(ngModel)]="l.qty" (change)="updateAmount(idx)" class="cell-input">
+              </td>
+            </ng-container>
+
+            <!-- Unit Column -->
+            <ng-container matColumnDef="unit">
+              <th mat-header-cell *matHeaderCellDef>{{ 'document.unit' | translate }}</th>
+              <td mat-cell *matCellDef="let l">
+                <input matInput placeholder="e.g., kW" [(ngModel)]="l.unit" class="cell-input">
+              </td>
+            </ng-container>
+
+            <!-- Rate Column -->
+            <ng-container matColumnDef="rate">
+              <th mat-header-cell *matHeaderCellDef>{{ 'document.rate' | translate }}</th>
+              <td mat-cell *matCellDef="let l; let idx = index">
+                <input matInput type="number" placeholder="0.00" [(ngModel)]="l.rate" (change)="updateAmount(idx)" class="cell-input">
+              </td>
+            </ng-container>
+
+            <!-- GST Percent Column -->
+            <ng-container matColumnDef="gstPercent">
+              <th mat-header-cell *matHeaderCellDef>{{ 'document.gst' | translate }}</th>
+              <td mat-cell *matCellDef="let l">
+                <input matInput placeholder="18" [(ngModel)]="l.gstPercent" class="cell-input">
+              </td>
+            </ng-container>
+
+            <!-- Amount Column -->
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef>{{ 'document.amount' | translate }}</th>
+              <td mat-cell *matCellDef="let l" class="amount-cell">
+                {{ l.amount | number:'1.2-2' }}
+              </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let l; let idx = index">
+                <button mat-icon-button color="warn" (click)="removeLine(idx)" *ngIf="lineItems().length > 1" title="Delete line">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <!-- Table Rows -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+
+        <!-- Add Line Button -->
+        <button mat-stroked-button color="primary" (click)="addLine()" class="add-line-btn">
+          <mat-icon>add</mat-icon> {{ 'document.addLine' | translate }}
+        </button>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="generate-actions">
+        <button mat-raised-button color="primary" (click)="generate()" 
+                [disabled]="!selectedTemplate() || isLoading() || isLoadingTemplates()"
+                class="generate-btn">
+          <mat-icon>build</mat-icon> {{ 'document.generateDocument' | translate }}
+        </button>
+      </div>
+
+      <!-- Success Message -->
+      <div *ngIf="generatedFile()" class="success-message">
+        <mat-icon>check_circle</mat-icon>
+        <div>
+          <p>{{ 'document.generatedAt' | translate }}: {{ generatedFile() }}</p>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <!-- Loading State -->
+    <mat-card-content *ngIf="isLoading()" class="loading-container">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>{{ 'common.generating' | translate }} document...</p>
+      <p class="generating-template">Template: {{ selectedTemplate() }}</p>
+    </mat-card-content>
+  </mat-card>
+</div>

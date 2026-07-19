@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: 'DejaVu Sans', sans-serif; font-size: 12px; line-height: 1.5; }
+    h1 { text-align: center; font-size: 16px; }
+    h2 { font-size: 13px; text-decoration: underline; margin-top: 20px; }
+    ol { padding-left: 20px; }
+    .sign-block { margin-top: 60px; display: flex; justify-content: space-between; }
+  </style>
+</head>
+<body>
+  <h1>Model Draft Agreement between Consumer &amp; Vendor for installation of<br/>
+      grid connected rooftop solar (RTS) project under PM &ndash; Surya Ghar: Muft Bijli Yojana</h1>
+
+  <p>This agreement is executed on <span th:text="${agreementDate}"></span> for design, supply,
+     installation, commissioning and 5-year comprehensive maintenance of RTS project/system
+     along with warranty under PM Surya Ghar: Muft Bijli Yojana.</p>
+
+  <h2>Between</h2>
+  <p><b th:text="${consumerName}"></b> has address at <span th:text="${consumerAddress}"></span>
+     (hereinafter referred to as First Party i.e. consumer/purchaser/owner of system).</p>
+
+  <h2>And</h2>
+  <p><b th:text="${vendorCompanyName}"></b> having registered office at
+     <span th:text="${vendorRegisteredAddress}"></span>
+     (hereinafter referred to as Second Party i.e. Vendor/Contractor/System Integrator).</p>
+
+  <h2>The First Party hereby undertakes to perform the following activities:</h2>
+  <ol>
+    <li>Submission of online application at the National Portal for installation of the RTS project/system, and upload of relevant documents.</li>
+    <li>Provide secure storage of the material of the RTS plant delivered at the premises till handover.</li>
+    <li>Provide access to the rooftop during installation, O&amp;M, testing, and meter reading.</li>
+    <li>Provide electricity during plant installation and water for cleaning of the panels.</li>
+    <li>Report any malfunctioning of the plant to the Vendor during the warranty period.</li>
+    <li>Pay the amount as per the mutually agreed payment schedule.</li>
+  </ol>
+
+  <h2>The Second Party hereby undertakes to perform the following activities:</h2>
+  <ol>
+    <li>Follow all standards and safety guidelines prescribed under state regulations and MNRE technical standards for RTS projects.</li>
+    <li>Carry out site survey and prepare a detailed project report for the RTS system installation.</li>
+    <!-- Paste the remaining numbered clauses from your Work_Annex_2_Agreement...docx verbatim here -->
+  </ol>
+
+  <p>Sanctioned/Plant Capacity: <span th:text="${plantCapacityKw}"></span> kW</p>
+
+  <div class="sign-block">
+    <div>Signature of First Party (Consumer)</div>
+    <div>Signature of Second Party (Vendor)</div>
+  </div>
+</body>
+</html>

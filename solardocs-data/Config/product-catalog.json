@@ -1,0 +1,6 @@
+{
+  "products": [
+    { "code": "MOD-550-DCR", "name": "550W DCR Adani Topcon Bifacial PERC", "type": "Solar PV Module", "unit": "W", "defaultRate": 16200, "defaultGstPercent": "5%" },
+    { "code": "INV-3KW-1P", "name": "3KW 1 Phase On-Grid Inverter", "type": "Inverter", "unit": "Pc", "defaultRate": 22540, "defaultGstPercent": "5%" }
+  ]
+}

@@ -1,0 +1,22 @@
+:host { display: block; }
+
+.customer-documents { display: grid; gap: 16px; }
+.customer-documents mat-card-content { padding-top: 16px; }
+.upload-form { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.upload-form mat-form-field { min-width: 260px; }
+.file-picker { display: flex; align-items: center; gap: 8px; max-width: 360px; }
+.file-picker span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.checklist-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.checklist-item, .uploaded-file { display: flex; align-items: flex-start; gap: 10px; }
+.checklist-item mat-icon { color: #9ca3af; }
+.checklist-item mat-icon.complete { color: #16a34a; }
+.checklist-item span, .uploaded-file span { display: block; color: var(--text-secondary); font-size: 12px; margin-top: 2px; }
+.uploaded-file { padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+.uploaded-file:last-child { border-bottom: 0; }
+.loading { display: flex; justify-content: center; padding: 24px; }
+.empty { color: var(--text-secondary); margin: 0; }
+
+@media (max-width: 768px) {
+  .upload-form { align-items: stretch; }
+  .upload-form mat-form-field, .file-picker, .upload-form button { width: 100%; max-width: none; }
+}

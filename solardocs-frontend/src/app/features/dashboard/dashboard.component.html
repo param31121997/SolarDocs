@@ -1,0 +1,72 @@
+<div class="dashboard-container">
+  <div class="page-header">
+    <h1>{{ 'dashboard.title' | translate }}</h1>
+  </div>
+
+  <div *ngIf="isLoading()" class="loading-container">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+
+  <ng-container *ngIf="!isLoading(); else loading">
+    <ng-container *ngIf="summary() as s">
+    <div class="dashboard-grid">
+    <!-- Total Customers -->
+    <mat-card class="stat-card primary">
+      <mat-card-content>
+        <div class="stat-icon"><mat-icon>people</mat-icon></div>
+        <div class="stat-info">
+          <span class="stat-label">{{ 'dashboard.totalCustomers' | translate }}</span>
+          <span class="stat-value">{{ s.totalCustomers }}</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Pending Documents -->
+    <mat-card class="stat-card accent">
+      <mat-card-content>
+        <div class="stat-icon"><mat-icon>description</mat-icon></div>
+        <div class="stat-info">
+          <span class="stat-label">{{ 'dashboard.pendingDocuments' | translate }}</span>
+          <span class="stat-value">{{ s.pendingDocuments }}</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Commissioned This Month -->
+    <mat-card class="stat-card success">
+      <mat-card-content>
+        <div class="stat-icon"><mat-icon>check_circle</mat-icon></div>
+        <div class="stat-info">
+          <span class="stat-label">{{ 'dashboard.commissioned' | translate }}</span>
+          <span class="stat-value">{{ s.installedThisMonth }}</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Status Breakdown -->
+    <mat-card class="full-width">
+      <mat-card-header>
+        <mat-card-title>{{ 'dashboard.statusBreakdown' | translate }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="status-breakdown" *ngFor="let entry of s.countsByStatus | keyvalue">
+          <div class="status-item">
+            <span class="status-name">{{ 'customer.status.' + entry.key | translate }}</span>
+            <div class="status-bar">
+              <div class="status-progress" [style.width.%]="($any(entry.value) / s.totalCustomers) * 100"></div>
+            </div>
+            <span class="status-count">{{ entry.value }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    </div>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #loading>
+    <div class="loading-container">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+  </ng-template>
+</div>

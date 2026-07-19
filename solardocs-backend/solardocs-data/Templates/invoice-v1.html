@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: 'DejaVu Sans', sans-serif; font-size: 12px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #333; padding: 6px; }
+    .page-break { page-break-before: always; }
+    h1, h2 { text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>Quotation / Invoice</h1>
+  <table>
+    <tr><td><b>Bill No:</b></td><td th:text="${billNo}"></td><td><b>Date:</b></td><td th:text="${date}"></td></tr>
+    <tr><td><b>Name:</b></td><td colspan="3" th:text="${customerName}"></td></tr>
+    <tr><td><b>Mobile:</b></td><td colspan="3" th:text="${mobile}"></td></tr>
+  </table>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Items</th><th>Type</th><th>Qnty</th><th>Unit</th><th>Rate</th><th>GST</th><th>Amount</th></tr>
+    </thead>
+    <tbody>
+      <tr th:each="line : ${lineItems}">
+        <td th:text="${line.slNo}"></td>
+        <td th:text="${line.item}"></td>
+        <td th:text="${line.type}"></td>
+        <td th:text="${line.qty}"></td>
+        <td th:text="${line.unit}"></td>
+        <td th:text="${line.rate}"></td>
+        <td th:text="${line.gstPercent}"></td>
+        <td th:text="${line.amount}"></td>
+      </tr>
+      <tr><td colspan="7"><b>Total</b></td><td th:text="${total}"></td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-break"></div>
+  <h2>Payment Receipt</h2>
+  <table>
+    <tr><td><b>Received From:</b></td><td th:text="${customerName}"></td></tr>
+    <tr><td><b>Receipt No:</b></td><td th:text="${receiptNo}"></td></tr>
+    <tr><td><b>Date:</b></td><td th:text="${receiptDate}"></td></tr>
+    <tr><td><b>Amount Received:</b></td><td th:text="${amountReceived}"></td></tr>
+    <tr><td><b>Amount in Words:</b></td><td th:text="${amountReceivedInWords}"></td></tr>
+  </table>
+</body>
+</html>

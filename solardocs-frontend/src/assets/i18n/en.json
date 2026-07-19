@@ -1,0 +1,84 @@
+{
+  "app": { "title": "SolarDocs", "tagline": "Solar Installation Vendor Management" },
+  "nav": {
+    "dashboard": "Dashboard",
+    "customers": "Customers",
+    "documents": "Documents",
+    "reports": "Reports",
+    "settings": "Settings",
+    "backup": "Backup",
+    "license": "License"
+  },
+  "language": { "label": "Language", "en": "English", "hi": "हिन्दी (Hindi)", "mr": "मराठी (Marathi)" },
+  "common": {
+    "save": "Save", "cancel": "Cancel", "delete": "Delete", "edit": "Edit",
+    "search": "Search", "create": "Create", "update": "Update", "close": "Close",
+    "yes": "Yes", "no": "No", "loading": "Loading...", "actions": "Actions",
+    "open": "Open", "back": "Back", "download": "Download", "upload": "Upload",
+    "generate": "Generate", "confirm": "Confirm", "required": "Required"
+  },
+  "customer": {
+    "title": "Customers", "new": "New Customer", "id": "Customer ID", "name": "Name",
+    "mobile": "Mobile", "alternateMobile": "Alternate Mobile", "address": "Address",
+    "addressLine": "Address Line", "village": "Village", "district": "District",
+    "state": "State", "pincode": "Pincode", "consumerNumber": "Consumer Number",
+    "applicationNumber": "Application Number", "sanctionedLoad": "Sanctioned Load (kW)",
+    "plantCapacity": "Plant Capacity (kW)", "discom": "DISCOM", "category": "Category",
+    "residential": "Residential", "commercial": "Commercial", "statusLabel": "Status",
+    "searchPlaceholder": "Search by name, ID, mobile, consumer no.",
+    "createdAt": "Created", "updatedAt": "Last Updated",
+    "overview": "Overview", "documentsTab": "Documents", "generatedPdfs": "Generated PDFs", "notes": "Notes",
+    "status": {
+      "LEAD": "Lead", "QUOTATION_SENT": "Quotation Sent", "AGREEMENT_SIGNED": "Agreement Signed",
+      "DOCUMENTS_COLLECTED": "Documents Collected", "INSTALLATION_IN_PROGRESS": "Installation In Progress",
+      "COMMISSIONED": "Commissioned", "SUBSIDY_APPLIED": "Subsidy Applied",
+      "SUBSIDY_RECEIVED": "Subsidy Received", "CLOSED": "Closed"
+    }
+  },
+  "document": {
+    "title": "Documents", "type": "Document Type", "chooseFile": "Choose File",
+    "uploadedOn": "Uploaded On", "generateDocument": "Generate Document",
+    "templateType": "Template", "billNo": "Bill No", "lineItems": "Line Items",
+    "item": "Item", "itemType": "Type", "qty": "Qty", "unit": "Unit", "rate": "Rate",
+    "gst": "GST %", "amount": "Amount", "addLine": "Add Line", "total": "Total",
+    "amountInWords": "Amount in Words", "bankDetails": "Bank Details",
+    "templates": {
+      "QUOTATION": "Solar Quotation", "INVOICE": "Invoice",
+      "AGREEMENT": "Consumer-Vendor Agreement", "DCR_DECLARATION": "DCR Declaration",
+      "ANNEXURE_I": "Annexure-I", "NET_METER_AGREEMENT": "Net Meter Agreement",
+      "COMMISSIONING_REPORT": "Commissioning Report"
+    },
+    "types": {
+      "AADHAAR": "Aadhaar Card", "PAN": "PAN Card", "ELECTRICITY_BILL": "Electricity Bill",
+      "SANCTION_LETTER": "Sanction Letter", "MODULE_DATASHEET": "Module Datasheet",
+      "INVERTER_DATASHEET": "Inverter Datasheet", "SITE_PHOTO_BEFORE": "Site Photo - Before",
+      "SITE_PHOTO_AFTER": "Site Photo - After", "CUSTOMER_SIGNATURE": "Customer Signature"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard", "totalCustomers": "Total Customers",
+    "pendingDocuments": "Pending Documents", "commissioned": "Commissioned",
+    "statusBreakdown": "Status Breakdown"
+  },
+  "reports": { "title": "Reports", "exportCsv": "Export Customer List (CSV)" },
+  "settings": {
+    "title": "Settings", "vendorProfile": "Vendor Profile", "companyName": "Company Name",
+    "gstin": "GSTIN", "registeredAddress": "Registered Address", "bankAccountName": "Bank Account Name",
+    "bankAccountNumber": "Bank Account Number", "bankIfsc": "Bank IFSC", "signatoryName": "Signatory Name",
+    "productCatalog": "Product Catalog", "documentTypes": "Document Types"
+  },
+  "license": {
+    "title": "License Activation", "enterKey": "Enter your license key",
+    "activate": "Activate", "status": "License Status", "active": "Active",
+    "notActivated": "Not Activated", "expired": "Expired or Invalid"
+  },
+  "backup": {
+    "title": "Backup & Restore", "createBackup": "Create Backup", "restore": "Restore",
+    "availableBackups": "Available Backups", "confirmRestore": "Restoring will overwrite current data. Continue?"
+  },
+  "setup": {
+    "title": "Welcome to SolarDocs", "chooseFolder": "Choose Data Folder",
+    "explainer": "This is where all your customer data, PDFs, and backups will be stored.",
+    "continue": "Continue"
+  }
+}

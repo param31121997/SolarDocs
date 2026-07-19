@@ -1,0 +1,64 @@
+<section class="customer-documents">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Customer documents</mat-card-title>
+      <mat-card-subtitle>Upload the evidence needed for agreements, MSEDCL forms, commissioning, and handover.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="upload-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Document type</mat-label>
+          <mat-select [value]="selectedType()" (selectionChange)="selectedType.set($event.value)">
+            <mat-option *ngFor="let option of documentTypes" [value]="option.code">
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="file-picker">
+          <input #fileInput type="file" accept="image/*,application/pdf,.doc,.docx" (change)="onFileSelected($event)">
+          <span>{{ selectedFile()?.name ?? 'Choose a file' }}</span>
+        </div>
+
+        <button mat-raised-button color="primary" type="button" (click)="upload()" [disabled]="isUploading()">
+          <mat-icon>upload_file</mat-icon>
+          {{ isUploading() ? 'Uploading…' : 'Upload / replace document' }}
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="document-checklist">
+    <mat-card-header>
+      <mat-card-title>Document checklist</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div *ngIf="isLoading()" class="loading"><mat-spinner diameter="32"></mat-spinner></div>
+      <div *ngIf="!isLoading()" class="checklist-grid">
+        <div class="checklist-item" *ngFor="let option of documentTypes">
+          <mat-icon [class.complete]="hasDocument(option.code)">
+            {{ hasDocument(option.code) ? 'check_circle' : 'radio_button_unchecked' }}
+          </mat-icon>
+          <div>
+            <strong>{{ option.label }}</strong>
+            <span>{{ option.requiredFor }}</span>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-header><mat-card-title>Uploaded files</mat-card-title></mat-card-header>
+    <mat-card-content>
+      <p class="empty" *ngIf="!isLoading() && uploadedDocuments().length === 0">No customer documents uploaded yet.</p>
+      <div class="uploaded-file" *ngFor="let document of uploadedDocuments()">
+        <mat-icon>description</mat-icon>
+        <div>
+          <strong>{{ labelFor(document.type) }}</strong>
+          <span>{{ document.fileName }} · {{ document.uploadedAt | date:'medium' }}</span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</section>

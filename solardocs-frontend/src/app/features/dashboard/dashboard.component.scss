@@ -1,0 +1,179 @@
+﻿.dashboard-container {
+  padding: 32px 28px;
+  max-width: 1600px;
+  margin: 0 auto;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+
+  .page-header {
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid #e5e7eb;
+
+    h1 {
+      margin: 0 0 8px 0;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  .loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    padding: 60px 20px;
+  }
+
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 28px;
+    margin-bottom: 36px;
+
+    .stat-card {
+      border-radius: 14px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+
+      &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+      }
+
+      &.primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+      }
+
+      &.accent {
+        background: linear-gradient(135deg, var(--accent-color), #d63649);
+        color: white;
+      }
+
+      &.success {
+        background: linear-gradient(135deg, var(--success-color), #059669);
+        color: white;
+      }
+
+      mat-card-content {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 28px 24px;
+        height: 140px;
+
+        .stat-icon {
+          mat-icon {
+            font-size: 40px;
+            width: 40px;
+            height: 40px;
+            color: rgba(255, 255, 255, 0.8);
+          }
+        }
+
+        .stat-info {
+          display: flex;
+          flex-direction: column;
+
+          .stat-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+          }
+
+          .stat-value {
+            font-size: 28px;
+            color: white;
+            font-weight: 700;
+            margin-top: 4px;
+          }
+        }
+      }
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+
+      mat-card-header {
+        border-bottom: 2px solid var(--border-color);
+        padding: 16px 24px;
+
+        mat-card-title {
+          margin: 0;
+          font-size: 18px;
+          font-weight: 600;
+        }
+      }
+
+      mat-card-content {
+        padding: 24px;
+
+        .status-breakdown {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 16px;
+
+          .status-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            .status-name {
+              font-weight: 500;
+              font-size: 14px;
+              color: var(--text-primary);
+            }
+
+            .status-bar {
+              height: 24px;
+              background-color: var(--background);
+              border-radius: 12px;
+              overflow: hidden;
+
+              .status-progress {
+                height: 100%;
+                background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+                border-radius: 12px;
+                transition: width 0.3s ease;
+              }
+            }
+
+            .status-count {
+              font-size: 12px;
+              color: var(--text-secondary);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 16px;
+
+    .page-header h1 {
+      font-size: 24px;
+    }
+
+    .dashboard-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+
+      .full-width {
+        .status-breakdown {
+          grid-template-columns: 1fr;
+        }
+      }
+    }
+  }
+}
