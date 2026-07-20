@@ -1,8 +1,9 @@
-import { Component, inject, input, OnInit, signal, effect } from '@angular/core';
+import { Component, inject, input, OnInit, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
@@ -20,7 +21,7 @@ import { TranslatePipe } from '../../core/i18n/translate.pipe';
   standalone: true,
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatSelectModule,
-    MatInputModule, MatButtonModule, MatTableModule, MatProgressSpinnerModule,
+    MatAutocompleteModule, MatInputModule, MatButtonModule, MatTableModule, MatProgressSpinnerModule,
     MatSnackBarModule, MatCardModule, MatIconModule, TranslatePipe
   ],
   templateUrl: './generate-document.component.html',
@@ -40,11 +41,19 @@ export class GenerateDocumentComponent implements OnInit {
   isLoading = signal(false);
   isLoadingTemplates = signal(true);
   error = signal<string | null>(null);
-  displayedColumns = ['slNo', 'product', 'item', 'type', 'qty', 'unit', 'rate', 'gstPercent', 'amount', 'actions'];
+  displayedColumns = ['slNo', 'item', 'type', 'qty', 'unit', 'rate', 'gstPercent', 'amount', 'actions'];
 
   catalog = signal<Item[]>([]);
   isLoadingCatalog = signal(true);
   private catalogAutoPopulated = false;
+
+  /** Sum of every line's Amount (GST-inclusive), shown as the table's Total row. */
+  totalAmount = computed(() => this.lineItems().reduce((sum, l) => sum + (parseFloat(l.amount) || 0), 0));
+
+  /** True when a row is quantity-based (has a Unit, e.g. "W", "Pc", "KW") and should show the Qty input. Flat/lump-sum rows from Item Master (Transportation, Comprehensive Maintenance) have no unit, so Qty is meaningless for them - they're priced at Rate directly. */
+  hasUnit(row: any): boolean {
+    return !!(row.unit && String(row.unit).trim());
+  }
 
   constructor() {
     // Whenever both the catalog and a QUOTATION/INVOICE template selection
@@ -96,29 +105,36 @@ export class GenerateDocumentComponent implements OnInit {
     return items.length === 1 && !items[0].item && !items[0].qty && !items[0].rate;
   }
 
-  /** Replaces the line-item table with one row per Item Master entry (rate/type/unit prefilled, quantity left blank for the vendor to fill in). */
+  /** Replaces the line-item table with one row per Item Master entry (rate/type/unit prefilled, quantity left blank for the vendor to fill in - except flat-rate rows with no unit, which are priced immediately). */
   loadFromCatalog() {
     const items = this.catalog();
     if (items.length === 0) {
       this.snackBar.open('Item Master is empty. Add items in Master Data > Items first.', 'Close', { duration: 4000 });
       return;
     }
-    this.lineItems.set(items.map((it, idx) => ({
-      slNo: idx + 1,
-      productCode: it.id,
-      item: it.itemName,
-      type: it.type ?? '',
-      qty: '',
-      unit: it.unit ?? '',
-      rate: it.defaultRate ?? 0,
-      gstPercent: it.defaultGstPercent ?? '',
-      amount: 0
-    })));
+    this.lineItems.set(items.map((it, idx) => {
+      const rate = it.defaultRate ?? 0;
+      const gstPercent = parseFloat(it.defaultGstPercent ?? '') || 0;
+      const flatRate = !(it.unit && it.unit.trim());
+      const amount = flatRate ? rate + (rate * gstPercent / 100) : 0;
+      return {
+        slNo: idx + 1,
+        productCode: it.id,
+        item: it.itemName,
+        type: it.type ?? '',
+        qty: '',
+        unit: it.unit ?? '',
+        rate,
+        gstPercent: it.defaultGstPercent ?? '',
+        amount
+      };
+    }));
   }
 
-  /** Applies an Item Master item's defaults onto one existing row, keeping any quantity the vendor already typed. */
-  applyProduct(index: number, id: string) {
-    const item = this.catalog().find(it => it.id === id);
+  /** Applies an Item Master item's defaults onto one existing row (picked via the Item column's autocomplete), keeping any quantity the vendor already typed. */
+  onItemSelected(index: number, event: MatAutocompleteSelectedEvent) {
+    const itemName: string = event.option.value;
+    const item = this.catalog().find(it => it.itemName === itemName);
     if (!item) {
       return;
     }
@@ -136,6 +152,29 @@ export class GenerateDocumentComponent implements OnInit {
       return updated;
     });
     this.updateAmount(index);
+  }
+
+  /** Options shown under the Item column's autocomplete as the vendor types - matches on item name, falls back to the full active list when empty. */
+  filteredCatalog(query: string | null | undefined): Item[] {
+    const items = this.catalog();
+    const normalized = (query ?? '').trim().toLowerCase();
+    if (!normalized) {
+      return items;
+    }
+    return items.filter(it => it.itemName.toLowerCase().includes(normalized));
+  }
+
+  /** Typing in the Item column freehand (not picking a suggestion) clears any previously-applied catalog link so it's treated as a custom line again. */
+  onItemTyped(index: number) {
+    this.lineItems.update(items => {
+      const updated = [...items];
+      const current = updated[index];
+      const stillMatches = this.catalog().some(it => it.id === current.productCode && it.itemName === current.item);
+      if (!stillMatches) {
+        updated[index] = { ...current, productCode: '' };
+      }
+      return updated;
+    });
   }
 
   loadTemplates() {
@@ -204,12 +243,15 @@ export class GenerateDocumentComponent implements OnInit {
   updateAmount(index: number) {
     this.lineItems.update(items => {
       const item = items[index];
-      if (item.rate && item.qty) {
-        const qty = parseFloat(item.qty) || 0;
-        const rate = parseFloat(item.rate) || 0;
-        item.amount = qty * rate;
-        console.log(`Updated amount for line ${index}: ${item.amount}`);
-      }
+      const rate = parseFloat(item.rate) || 0;
+      const gstPercent = parseFloat(item.gstPercent) || 0;
+      // Flat/lump-sum rows (no Unit - e.g. Transportation, Comprehensive
+      // Maintenance) are priced at Rate directly, as if qty=1; the Qty
+      // input is hidden for these in the template (see hasUnit()).
+      const qty = this.hasUnit(item) ? (parseFloat(item.qty) || 0) : 1;
+      const baseAmount = qty * rate;
+      item.amount = baseAmount + (baseAmount * gstPercent / 100);
+      console.log(`Updated amount for line ${index}: ${item.amount} (qty=${qty}, rate=${rate}, gst=${gstPercent}%)`);
       return [...items];
     });
   }

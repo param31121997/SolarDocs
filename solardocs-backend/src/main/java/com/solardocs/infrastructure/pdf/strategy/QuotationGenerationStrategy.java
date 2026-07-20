@@ -1,5 +1,6 @@
 package com.solardocs.infrastructure.pdf.strategy;
 
+import com.solardocs.domain.common.Address;
 import com.solardocs.domain.common.QuotationLineItem;
 import com.solardocs.domain.customer.Customer;
 import com.solardocs.infrastructure.pdf.util.IndianCurrencyWordsConverter;
@@ -29,24 +30,45 @@ public class QuotationGenerationStrategy implements DocumentGenerationStrategy {
                 (String) m.get("type"),
                 String.valueOf(m.getOrDefault("qty", "")),
                 (String) m.getOrDefault("unit", ""),
-                new BigDecimal(String.valueOf(m.getOrDefault("rate", "0"))),
+                toBigDecimal(m.get("rate")),
                 (String) m.getOrDefault("gstPercent", ""),
-                new BigDecimal(String.valueOf(m.getOrDefault("amount", "0")))
+                toBigDecimal(m.get("amount"))
         )).toList();
 
         BigDecimal total = lineItems.stream().map(QuotationLineItem::amount).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // customer.getAddress() can be null for a customer created without full
+        // details filled in yet - the template dereferences address.addressLine/
+        // village/pincode directly, so a null here previously crashed PDF
+        // rendering with a SpringEL "cannot be found on null" error. Default to
+        // an all-blank Address instead so the quotation still generates, just
+        // with blank address fields the vendor can fill in on the printout.
+        Address address = customer.getAddress() != null ? customer.getAddress() : new Address("", "", "", "", "");
 
         return Map.of(
                 "billNo", billNo,
                 "date", LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
                 "customerName", customer.getName(),
-                "address", customer.getAddress(),
+                "address", address,
                 "mobile", customer.getMobile(),
-                "state", customer.getAddress() != null ? customer.getAddress().state() : "",
+                "state", address.state() != null ? address.state() : "",
                 "lineItems", lineItems,
                 "total", total,
                 "amountInWords", IndianCurrencyWordsConverter.toWords(total),
                 "bankDetails", extraFields.getOrDefault("bankDetails", Map.of())
         );
+    }
+
+    /** A vendor leaving Rate/Amount blank on a row sends "" (or the key is absent) rather than "0" - both must fall back to zero instead of blowing up BigDecimal's parser. */
+    private static BigDecimal toBigDecimal(Object value) {
+        String s = value == null ? "" : String.valueOf(value).trim();
+        if (s.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+        try {
+            return new BigDecimal(s);
+        } catch (NumberFormatException e) {
+            return BigDecimal.ZERO;
+        }
     }
 }

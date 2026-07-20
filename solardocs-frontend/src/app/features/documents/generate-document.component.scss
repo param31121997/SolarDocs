@@ -45,32 +45,72 @@
 
 .line-items-table {
   width: 100%;
-  min-width: 1120px;
+  table-layout: fixed;
 }
 
 .line-items-table th,
 .line-items-table td {
-  padding: 10px 12px;
-  white-space: nowrap;
+  padding: 8px 6px;
+  overflow: hidden;
 }
 
 .line-items-table th {
   font-weight: 600;
   color: var(--text-secondary);
+  white-space: nowrap;
 }
 
-.cell-input {
-  width: 150px;
-  min-width: 120px;
-}
+/* Column widths - percentages sum to 100%, sized by how much content each realistically holds */
+.line-items-table th:nth-child(1), .line-items-table td:nth-child(1) { width: 3%; }   /* # */
+.line-items-table th:nth-child(2), .line-items-table td:nth-child(2) { width: 22%; }  /* Item */
+.line-items-table th:nth-child(3), .line-items-table td:nth-child(3) { width: 16%; }  /* Type */
+.line-items-table th:nth-child(4), .line-items-table td:nth-child(4) { width: 8%; }   /* Qty */
+.line-items-table th:nth-child(5), .line-items-table td:nth-child(5) { width: 11%; }  /* Unit */
+.line-items-table th:nth-child(6), .line-items-table td:nth-child(6) { width: 10%; }  /* Rate */
+.line-items-table th:nth-child(7), .line-items-table td:nth-child(7) { width: 8%; }   /* GST */
+.line-items-table th:nth-child(8), .line-items-table td:nth-child(8) { width: 13%; }  /* Amount */
+.line-items-table th:nth-child(9), .line-items-table td:nth-child(9) { width: 9%; }   /* Actions */
 
+.cell-input,
 .cell-select {
-  width: 190px;
-  min-width: 160px;
+  width: 100%;
+}
+
+/* Compact the Material form-field chrome so cells don't need extra width just for outline/label padding */
+.line-items-table ::ng-deep .mat-mdc-text-field-wrapper {
+  padding: 0 8px;
+}
+
+.line-items-table ::ng-deep .mat-mdc-form-field-infix {
+  min-height: 40px;
+  padding: 8px 0;
+}
+
+.line-items-table ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+  display: none;
 }
 
 .amount-cell {
   font-weight: 600;
+}
+
+.flat-rate-hint {
+  color: var(--text-secondary);
+  padding-left: 4px;
+}
+
+.line-items-table ::ng-deep .mat-mdc-footer-row {
+  background: var(--surface-hover, #f5f5f5);
+}
+
+.line-items-table th.total-label,
+.line-items-table td.total-label {
+  font-weight: 700;
+}
+
+.total-cell {
+  font-weight: 700;
+  font-size: 1.05em;
 }
 
 .line-item-actions {
