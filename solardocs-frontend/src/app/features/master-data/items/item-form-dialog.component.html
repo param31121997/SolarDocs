@@ -1,19 +1,19 @@
 <h2 mat-dialog-title>
-  {{ (isEditMode ? 'productCategory.editTitle' : 'productCategory.addTitle') | translate }}
+  {{ (isEditMode ? 'item.editTitle' : 'item.addTitle') | translate }}
 </h2>
 
 <form [formGroup]="form" (ngSubmit)="save()">
   <mat-dialog-content>
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>{{ 'productCategory.categoryName' | translate }}</mat-label>
-      <input matInput formControlName="categoryName" maxlength="100" required>
-      <mat-error *ngIf="form.controls.categoryName.hasError('required')">
-        {{ 'productCategory.nameRequired' | translate }}
+      <mat-label>{{ 'item.itemName' | translate }}</mat-label>
+      <input matInput formControlName="itemName" maxlength="150" required>
+      <mat-error *ngIf="form.controls.itemName.hasError('required')">
+        {{ 'item.nameRequired' | translate }}
       </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>{{ 'productCategory.description' | translate }}</mat-label>
+      <mat-label>{{ 'item.description' | translate }}</mat-label>
       <textarea matInput formControlName="description" rows="3" maxlength="500"></textarea>
     </mat-form-field>
   </mat-dialog-content>

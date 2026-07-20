@@ -1,4 +1,4 @@
-.category-list-container { display: flex; flex-direction: column; gap: 16px; }
+.item-list-container { display: flex; flex-direction: column; gap: 16px; }
 
 .page-header {
   display: flex;
@@ -19,8 +19,6 @@
 .search-field { width: 100%; max-width: 360px; }
 
 .table-container { overflow-x: auto; }
-
-.code-cell { font-family: 'Consolas', monospace; }
 
 .empty-state {
   display: flex;

@@ -12,18 +12,15 @@ import { MatSlideToggleModule, MatSlideToggleChange } from '@angular/material/sl
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { ProductCategoryService } from '../../../core/services/product-category.service';
-import { ProductCategory } from '../../../core/models/product-category.model';
+import { ItemService } from '../../../core/services/item.service';
+import { Item } from '../../../core/models/item.model';
 import { TranslatePipe } from '../../../core/i18n/translate.pipe';
 import { TranslateService } from '../../../core/i18n/translate.service';
-import {
-  ProductCategoryFormDialogComponent,
-  ProductCategoryFormDialogResult
-} from './product-category-form-dialog.component';
+import { ItemFormDialogComponent, ItemFormDialogResult } from './item-form-dialog.component';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
-  selector: 'app-product-category-list',
+  selector: 'app-item-list',
   standalone: true,
   imports: [
     CommonModule, FormsModule, MatTableModule, MatButtonModule, MatIconModule,
@@ -31,17 +28,17 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
     MatSlideToggleModule, MatTooltipModule, MatDialogModule, MatSnackBarModule,
     TranslatePipe
   ],
-  templateUrl: './product-category-list.component.html',
-  styleUrl: './product-category-list.component.scss'
+  templateUrl: './item-list.component.html',
+  styleUrl: './item-list.component.scss'
 })
-export class ProductCategoryListComponent {
-  private categoryService = inject(ProductCategoryService);
+export class ItemListComponent {
+  private itemService = inject(ItemService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
   private translate = inject(TranslateService);
 
-  categories = signal<ProductCategory[]>([]);
-  columns = ['categoryCode', 'categoryName', 'description', 'active', 'createdAt', 'actions'];
+  items = signal<Item[]>([]);
+  columns = ['itemName', 'description', 'active', 'createdAt', 'actions'];
   isLoading = signal(false);
   searchQuery = signal('');
   includeInactive = signal(false);
@@ -50,8 +47,8 @@ export class ProductCategoryListComponent {
 
   reload() {
     this.isLoading.set(true);
-    this.categoryService.list(this.searchQuery(), this.includeInactive()).subscribe({
-      next: (list) => { this.categories.set(list); this.isLoading.set(false); },
+    this.itemService.list(this.searchQuery(), this.includeInactive()).subscribe({
+      next: (list) => { this.items.set(list); this.isLoading.set(false); },
       error: () => this.isLoading.set(false)
     });
   }
@@ -67,15 +64,15 @@ export class ProductCategoryListComponent {
   }
 
   openAddDialog() {
-    const ref = this.dialog.open<ProductCategoryFormDialogComponent, unknown, ProductCategoryFormDialogResult>(
-      ProductCategoryFormDialogComponent,
-      { width: '480px', data: { category: null } }
+    const ref = this.dialog.open<ItemFormDialogComponent, unknown, ItemFormDialogResult>(
+      ItemFormDialogComponent,
+      { width: '480px', data: { item: null } }
     );
     ref.afterClosed().subscribe(result => {
       if (!result) return;
-      this.categoryService.create(result).subscribe({
+      this.itemService.create(result).subscribe({
         next: () => {
-          this.snackBar.open(this.translate.instant('productCategory.created'), undefined, { duration: 2500 });
+          this.snackBar.open(this.translate.instant('item.created'), undefined, { duration: 2500 });
           this.reload();
         },
         error: (err) => this.showError(err)
@@ -83,16 +80,16 @@ export class ProductCategoryListComponent {
     });
   }
 
-  openEditDialog(category: ProductCategory) {
-    const ref = this.dialog.open<ProductCategoryFormDialogComponent, unknown, ProductCategoryFormDialogResult>(
-      ProductCategoryFormDialogComponent,
-      { width: '480px', data: { category } }
+  openEditDialog(item: Item) {
+    const ref = this.dialog.open<ItemFormDialogComponent, unknown, ItemFormDialogResult>(
+      ItemFormDialogComponent,
+      { width: '480px', data: { item } }
     );
     ref.afterClosed().subscribe(result => {
       if (!result) return;
-      this.categoryService.update(category.id, result).subscribe({
+      this.itemService.update(item.id, result).subscribe({
         next: () => {
-          this.snackBar.open(this.translate.instant('productCategory.updated'), undefined, { duration: 2500 });
+          this.snackBar.open(this.translate.instant('item.updated'), undefined, { duration: 2500 });
           this.reload();
         },
         error: (err) => this.showError(err)
@@ -100,27 +97,27 @@ export class ProductCategoryListComponent {
     });
   }
 
-  onToggleActive(category: ProductCategory, event: MatSlideToggleChange) {
-    this.categoryService.setActive(category.id, event.checked).subscribe({
+  onToggleActive(item: Item, event: MatSlideToggleChange) {
+    this.itemService.setActive(item.id, event.checked).subscribe({
       next: () => this.reload(),
       error: (err) => { event.source.checked = !event.checked; this.showError(err); }
     });
   }
 
-  confirmDelete(category: ProductCategory) {
+  confirmDelete(item: Item) {
     const ref = this.dialog.open(ConfirmDialogComponent, {
       width: '420px',
       data: {
-        titleKey: 'productCategory.deleteTitle',
-        messageKey: 'productCategory.deleteConfirm',
-        messageParams: { name: category.categoryName }
+        titleKey: 'item.deleteTitle',
+        messageKey: 'item.deleteConfirm',
+        messageParams: { name: item.itemName }
       }
     });
     ref.afterClosed().subscribe(confirmed => {
       if (!confirmed) return;
-      this.categoryService.delete(category.id).subscribe({
+      this.itemService.delete(item.id).subscribe({
         next: () => {
-          this.snackBar.open(this.translate.instant('productCategory.deleted'), undefined, { duration: 2500 });
+          this.snackBar.open(this.translate.instant('item.deleted'), undefined, { duration: 2500 });
           this.reload();
         },
         error: (err) => this.showError(err)

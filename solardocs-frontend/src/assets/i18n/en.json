@@ -11,7 +11,8 @@
     "settings": "Settings",
     "backup": "Backup",
     "license": "License",
-    "productCategories": "Product Categories"
+    "productCategories": "Product Categories",
+    "items": "Items"
   },
   "language": {
     "label": "Language",
@@ -191,5 +192,27 @@
     "deleted": "Category deleted",
     "deleteTitle": "Delete Category",
     "deleteConfirm": "Delete \"{{name}}\"? This category will be hidden from selection but kept on record."
+  },
+  "item": {
+    "title": "Item Master",
+    "subtitle": "Manage the reusable line items used when building quotations",
+    "new": "New Item",
+    "addTitle": "Add Item",
+    "editTitle": "Edit Item",
+    "itemName": "Item Name",
+    "description": "Description",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "showInactive": "Show inactive",
+    "createdDate": "Created Date",
+    "searchPlaceholder": "Search by item name",
+    "nameRequired": "Item name is required",
+    "noRecords": "No items yet",
+    "created": "Item created",
+    "updated": "Item updated",
+    "deleted": "Item deleted",
+    "deleteTitle": "Delete Item",
+    "deleteConfirm": "Delete \"{{name}}\"? This item will be hidden from selection but kept on record."
   }
 }

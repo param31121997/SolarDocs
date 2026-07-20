@@ -1,0 +1,75 @@
+<div class="item-list-container">
+  <div class="page-header">
+    <div>
+      <h2>{{ 'item.title' | translate }}</h2>
+      <p>{{ 'item.subtitle' | translate }}</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="openAddDialog()">
+      <mat-icon>add</mat-icon> {{ 'item.new' | translate }}
+    </button>
+  </div>
+
+  <div *ngIf="isLoading()" class="loading-bar">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+
+  <div class="toolbar-row">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>{{ 'item.searchPlaceholder' | translate }}</mat-label>
+      <input matInput [value]="searchQuery()" (input)="onSearch($any($event.target).value)">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-slide-toggle [checked]="includeInactive()" (change)="onToggleIncludeInactive($event.checked)">
+      {{ 'item.showInactive' | translate }}
+    </mat-slide-toggle>
+  </div>
+
+  <div class="table-container mat-elevation-z2">
+    <table mat-table [dataSource]="items()">
+      <ng-container matColumnDef="itemName">
+        <th mat-header-cell *matHeaderCellDef>{{ 'item.itemName' | translate }}</th>
+        <td mat-cell *matCellDef="let i">{{ i.itemName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>{{ 'item.description' | translate }}</th>
+        <td mat-cell *matCellDef="let i">{{ i.description }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="active">
+        <th mat-header-cell *matHeaderCellDef>{{ 'item.status' | translate }}</th>
+        <td mat-cell *matCellDef="let i">
+          <mat-slide-toggle [checked]="i.active" (change)="onToggleActive(i, $event)"
+                             [matTooltip]="(i.active ? 'item.active' : 'item.inactive') | translate">
+          </mat-slide-toggle>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef>{{ 'item.createdDate' | translate }}</th>
+        <td mat-cell *matCellDef="let i">{{ i.createdAt | date:'dd-MMM-yyyy' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>{{ 'common.actions' | translate }}</th>
+        <td mat-cell *matCellDef="let i">
+          <button mat-icon-button color="primary" (click)="openEditDialog(i)" [matTooltip]="'common.edit' | translate">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="confirmDelete(i)" [matTooltip]="'common.delete' | translate">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columns"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    </table>
+  </div>
+
+  <div *ngIf="items().length === 0 && !isLoading()" class="empty-state">
+    <mat-icon>inventory_2</mat-icon>
+    <p>{{ 'item.noRecords' | translate }}</p>
+  </div>
+</div>

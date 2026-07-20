@@ -36,7 +36,8 @@ public class AppDataDirectoryConfig {
 
     private final String dataDir;
 
-    public AppDataDirectoryConfig(@Value("${solardocs.data-dir}") String dataDir) {
+    public AppDataDirectoryConfig(
+        @Value("${solardocs.data-dir}") String dataDir) {
         this.dataDir = dataDir;
     }
 
