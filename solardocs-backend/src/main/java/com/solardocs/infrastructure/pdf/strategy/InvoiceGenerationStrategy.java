@@ -29,7 +29,7 @@ public class InvoiceGenerationStrategy implements DocumentGenerationStrategy {
         BigDecimal received = new BigDecimal(String.valueOf(extraFields.getOrDefault("amountReceived", "0")));
         base.put("receiptNo", extraFields.getOrDefault("receiptNo", "GNEC-" + (System.currentTimeMillis() % 10000 + 1)));
         base.put("receiptDate", LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        base.put("amountReceived", received);
+        base.put("amountReceived", QuotationGenerationStrategy.formatIndianAmount(received));
         base.put("amountReceivedInWords", IndianCurrencyWordsConverter.toWords(received));
         return base;
     }

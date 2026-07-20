@@ -1,56 +1,70 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8"/>
   <style>
     body { font-family: 'DejaVu Sans', sans-serif; font-size: 12px; }
     table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { border: 1px solid #333; padding: 6px; text-align: left; }
-    .header-row td { border: none; padding: 2px 6px; }
+    th, td { border: 1px solid #333; padding: 6px; text-align: left; vertical-align: top; }
+    .title-row td { text-align: center; font-size: 18px; font-weight: bold; }
     .total-row td { font-weight: bold; }
-    h1 { text-align: center; font-size: 18px; }
   </style>
 </head>
 <body>
-  <h1>Quotation</h1>
+  <div style="text-align:center; margin-bottom:8px;" th:if="${companyName}">
+    <div style="font-size:20px; font-weight:bold;" th:text="${companyName}"></div>
+    <div style="font-size:11px;" th:if="${companyAddress}" th:text="${companyAddress}"></div>
+    <div style="font-size:11px;" th:if="${companyGstin}" th:text="'GSTIN: ' + ${companyGstin}"></div>
+  </div>
   <table>
-    <tr class="header-row"><td><b>Bill No:</b></td><td th:text="${billNo}"></td><td><b>Date:</b></td><td th:text="${date}"></td></tr>
-    <tr class="header-row"><td><b>Name:</b></td><td colspan="3" th:text="${customerName}"></td></tr>
-    <tr class="header-row"><td><b>Address:</b></td><td colspan="3" th:text="${address.addressLine} + ', ' + ${address.village} + ' ' + ${address.pincode}"></td></tr>
-    <tr class="header-row"><td><b>Contact No.:</b></td><td colspan="3" th:text="${mobile}"></td></tr>
-    <tr class="header-row"><td><b>State:</b></td><td colspan="3" th:text="${state}"></td></tr>
+    <tr class="title-row"><td colspan="8">Quotation</td></tr>
+    <tr><td><b>Bill No:</b></td><td colspan="7" th:text="${billNo}"></td></tr>
+    <tr><td><b>Name:</b></td><td colspan="5" th:text="${customerName}"></td><td><b>Date</b></td><td th:text="${date}"></td></tr>
+    <tr><td><b>Address:</b></td><td colspan="7" th:text="${address.addressLine} + ', ' + ${address.village} + ' ' + ${address.pincode}"></td></tr>
+    <tr><td><b>Contact No.:</b></td><td colspan="7" th:text="${mobile}"></td></tr>
+    <tr><td><b>State:</b></td><td colspan="7" th:text="${state}"></td></tr>
+
+    <tr><th>#</th><th>Items</th><th>Type</th><th>Qnty</th><th>Unit</th><th>Rate</th><th>GST</th><th>Amount</th></tr>
+    <tr th:each="line : ${lineItems}">
+      <td th:text="${line.slNo}"></td>
+      <td th:text="${line.item}"></td>
+      <td th:text="${line.type}"></td>
+      <td th:text="${line.qty}"></td>
+      <td th:text="${line.unit}"></td>
+      <td th:text="${line.rateDisplay}"></td>
+      <td th:text="${line.gstDisplay}"></td>
+      <td th:text="${line.amountDisplay}"></td>
+    </tr>
+    <tr class="total-row"><td colspan="7">Total</td><td th:text="${totalDisplay}"></td></tr>
+
+    <tr class="total-row">
+      <td rowspan="2" colspan="6" th:text="'Amount in words: ' + ${amountInWords}"></td>
+      <td>Sub Total</td>
+      <td th:text="${subTotalDisplay}"></td>
+    </tr>
+    <tr class="total-row">
+      <td>Total</td>
+      <td th:text="${totalDisplay}"></td>
+    </tr>
+
+    <tr>
+      <td colspan="8">
+        <b>Bank Details:</b><br/>
+        <span th:text="'Account Name: ' + ${bankDetails.get('accountName')}"></span><br/>
+        <span th:text="'Account Number: ' + ${bankDetails.get('accountNumber')}"></span><br/>
+        <span th:text="'IFSC: ' + ${bankDetails.get('ifsc')}"></span>
+      </td>
+    </tr>
   </table>
 
-  <table>
-    <thead>
-      <tr><th>#</th><th>Items</th><th>Type</th><th>Qnty</th><th>Unit</th><th>Rate</th><th>GST</th><th>Amount</th></tr>
-    </thead>
-    <tbody>
-      <tr th:each="line : ${lineItems}">
-        <td th:text="${line.slNo}"></td>
-        <td th:text="${line.item}"></td>
-        <td th:text="${line.type}"></td>
-        <td th:text="${line.qty}"></td>
-        <td th:text="${line.unit}"></td>
-        <td th:text="${line.rate}"></td>
-        <td th:text="${line.gstPercent}"></td>
-        <td th:text="${line.amount}"></td>
-      </tr>
-      <tr class="total-row">
-        <td colspan="7">Total</td>
-        <td th:text="${total}"></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <table>
-    <tr><td><b>Amount in words:</b></td><td th:text="${amountInWords}"></td></tr>
-    <tr><td><b>Bank Details:</b></td>
-        <td>
-          <span th:text="'Account Name: ' + ${bankDetails.get('accountName')}"></span><br/>
-          <span th:text="'Account Number: ' + ${bankDetails.get('accountNumber')}"></span><br/>
-          <span th:text="'IFSC: ' + ${bankDetails.get('ifsc')}"></span>
-        </td>
+  <table style="border:none;">
+    <tr>
+      <td style="border:none; width:60%;"></td>
+      <td style="border:none; text-align:center;">
+        <div th:if="${companyName}" th:text="'For ' + ${companyName}"></div>
+        <div style="margin-top:36px;" th:text="${signatoryName}"></div>
+        <div style="font-size:10px;">Authorized Signatory</div>
+      </td>
     </tr>
   </table>
 </body>
