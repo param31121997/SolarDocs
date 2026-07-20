@@ -38,7 +38,7 @@ export class ItemListComponent {
   private translate = inject(TranslateService);
 
   items = signal<Item[]>([]);
-  columns = ['itemName', 'description', 'active', 'createdAt', 'actions'];
+  columns = ['itemName', 'type', 'unit', 'defaultRate', 'defaultGstPercent', 'active', 'actions'];
   isLoading = signal(false);
   searchQuery = signal('');
   includeInactive = signal(false);

@@ -32,9 +32,24 @@
         <td mat-cell *matCellDef="let i">{{ i.itemName }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="description">
-        <th mat-header-cell *matHeaderCellDef>{{ 'item.description' | translate }}</th>
-        <td mat-cell *matCellDef="let i">{{ i.description }}</td>
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>{{ 'item.type' | translate }}</th>
+        <td mat-cell *matCellDef="let i">{{ i.type }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="unit">
+        <th mat-header-cell *matHeaderCellDef>{{ 'item.unit' | translate }}</th>
+        <td mat-cell *matCellDef="let i">{{ i.unit }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="defaultRate">
+        <th mat-header-cell *matHeaderCellDef>{{ 'item.defaultRate' | translate }}</th>
+        <td mat-cell *matCellDef="let i">{{ i.defaultRate | number:'1.2-2' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="defaultGstPercent">
+        <th mat-header-cell *matHeaderCellDef>{{ 'item.defaultGstPercent' | translate }}</th>
+        <td mat-cell *matCellDef="let i">{{ i.defaultGstPercent }}</td>
       </ng-container>
 
       <ng-container matColumnDef="active">

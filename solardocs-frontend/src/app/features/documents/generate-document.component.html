@@ -55,7 +55,7 @@
                 <mat-form-field appearance="outline" class="cell-select" *ngIf="catalog().length > 0">
                   <mat-select [value]="l.productCode || ''" (selectionChange)="applyProduct(idx, $event.value)">
                     <mat-option value="">Custom</mat-option>
-                    <mat-option *ngFor="let p of catalog()" [value]="p.code">{{ p.name }}</mat-option>
+                    <mat-option *ngFor="let p of catalog()" [value]="p.id">{{ p.itemName }}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </td>
@@ -139,11 +139,11 @@
             <mat-icon>add</mat-icon> {{ 'document.addLine' | translate }}
           </button>
           <button mat-stroked-button (click)="loadFromCatalog()" class="load-catalog-btn"
-                  [disabled]="catalog().length === 0" title="Replace the table with your saved product catalog">
+                  [disabled]="catalog().length === 0" title="Replace the table with your Item Master catalog">
             <mat-icon>inventory_2</mat-icon> Load from Catalog
           </button>
           <span *ngIf="!isLoadingCatalog() && catalog().length === 0" class="catalog-empty-hint">
-            No products in your catalog yet - add some in Settings.
+            No items in Item Master yet - add some in Master Data &gt; Items.
           </span>
         </div>
       </div>

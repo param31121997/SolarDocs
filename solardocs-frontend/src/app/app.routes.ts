@@ -6,6 +6,7 @@ import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { SettingsComponent } from './features/settings/settings.component';
 import { BackupComponent } from './features/backup/backup.component';
 import { LicenseActivationComponent } from './features/license/license-activation.component';
+
 import { ItemListComponent } from './features/master-data/items/item-list.component';
 
 export const routes: Routes = [

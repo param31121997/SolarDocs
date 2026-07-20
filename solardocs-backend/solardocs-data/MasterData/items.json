@@ -2,7 +2,11 @@
   {
     "id": "c1a1a1a1-0001-4b1a-9a1a-000000000001",
     "itemName": "Solar PV Module",
-    "description": "Solar Panel",
+    "description": "550 W DCR Adani Topcon Bifacial PERC",
+    "type": "Solar Panel",
+    "unit": "W",
+    "defaultRate": 16200,
+    "defaultGstPercent": "5",
     "active": true,
     "createdAt": "2026-07-19T00:00:00Z",
     "updatedAt": "2026-07-19T00:00:00Z"
@@ -10,7 +14,11 @@
   {
     "id": "c1a1a1a1-0002-4b1a-9a1a-000000000002",
     "itemName": "Inverter",
-    "description": "Grid-tie inverter",
+    "description": "3KW 1 Phase On-Grid",
+    "type": "Grid-tie inverter",
+    "unit": "Pc",
+    "defaultRate": 22540,
+    "defaultGstPercent": "5",
     "active": true,
     "createdAt": "2026-07-19T00:00:00Z",
     "updatedAt": "2026-07-19T00:00:00Z"
@@ -18,7 +26,11 @@
   {
     "id": "c1a1a1a1-0003-4b1a-9a1a-000000000003",
     "itemName": "Module Mounting Structure",
-    "description": "GI/MS mounting structure",
+    "description": "GI MS Make",
+    "type": "Mounting Structure",
+    "unit": "Set",
+    "defaultRate": 15200,
+    "defaultGstPercent": "12",
     "active": true,
     "createdAt": "2026-07-19T00:00:00Z",
     "updatedAt": "2026-07-19T00:00:00Z"
@@ -26,7 +38,11 @@
   {
     "id": "c1a1a1a1-0004-4b1a-9a1a-000000000004",
     "itemName": "Cables (AC/DC), MC4 Connectors",
-    "description": "AC/DC cabling and MC4 connectors",
+    "description": "Polycab",
+    "type": "Cabling",
+    "unit": "As per Design",
+    "defaultRate": 6100,
+    "defaultGstPercent": "12",
     "active": true,
     "createdAt": "2026-07-19T00:00:00Z",
     "updatedAt": "2026-07-19T00:00:00Z"
@@ -34,7 +50,11 @@
   {
     "id": "c1a1a1a1-0005-4b1a-9a1a-000000000005",
     "itemName": "DCDB, DCDB",
-    "description": "DC distribution box",
+    "description": "Havells",
+    "type": "Distribution Box",
+    "unit": "Pc",
+    "defaultRate": 1950,
+    "defaultGstPercent": "12",
     "active": true,
     "createdAt": "2026-07-19T00:00:00Z",
     "updatedAt": "2026-07-19T00:00:00Z"
@@ -42,7 +62,11 @@
   {
     "id": "c1a1a1a1-0006-4b1a-9a1a-000000000006",
     "itemName": "Earthing & Lightning Arrester Set",
-    "description": "Copper coated earthing and lightning arrester set",
+    "description": "Copper Coated",
+    "type": "Earthing",
+    "unit": "Set",
+    "defaultRate": 3100,
+    "defaultGstPercent": "12",
     "active": true,
     "createdAt": "2026-07-19T00:00:00Z",
     "updatedAt": "2026-07-19T00:00:00Z"
@@ -51,6 +75,10 @@
     "id": "c1a1a1a1-0007-4b1a-9a1a-000000000007",
     "itemName": "Designing Installation And Commissioning",
     "description": "System design, installation and commissioning charges",
+    "type": "Service",
+    "unit": "KW",
+    "defaultRate": 7500,
+    "defaultGstPercent": "18",
     "active": true,
     "createdAt": "2026-07-19T00:00:00Z",
     "updatedAt": "2026-07-19T00:00:00Z"
@@ -59,6 +87,10 @@
     "id": "c1a1a1a1-0008-4b1a-9a1a-000000000008",
     "itemName": "Transportation",
     "description": "Transportation of material to site",
+    "type": "Service",
+    "unit": "",
+    "defaultRate": 0,
+    "defaultGstPercent": "",
     "active": true,
     "createdAt": "2026-07-19T00:00:00Z",
     "updatedAt": "2026-07-19T00:00:00Z"
@@ -67,6 +99,10 @@
     "id": "c1a1a1a1-0009-4b1a-9a1a-000000000009",
     "itemName": "Comprehensive Maintenance",
     "description": "Comprehensive maintenance for 5 years",
+    "type": "Service",
+    "unit": "",
+    "defaultRate": 0,
+    "defaultGstPercent": "",
     "active": true,
     "createdAt": "2026-07-19T00:00:00Z",
     "updatedAt": "2026-07-19T00:00:00Z"

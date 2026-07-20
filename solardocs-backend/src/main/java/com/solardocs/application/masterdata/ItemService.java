@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -23,12 +24,13 @@ public class ItemService {
         this.repository = repository;
     }
 
-    public Item create(String itemName, String description) {
+    public Item create(String itemName, String description, String type, String unit,
+                        BigDecimal defaultRate, String defaultGstPercent) {
         String normalizedName = requireName(itemName);
         assertNameIsUnique(normalizedName, null);
 
         String id = UUID.randomUUID().toString();
-        Item item = Item.create(id, normalizedName, description);
+        Item item = Item.create(id, normalizedName, description, type, unit, defaultRate, defaultGstPercent);
         repository.save(item);
 
         log.info("Item created: {}", item.itemName());
@@ -59,12 +61,13 @@ public class ItemService {
                 .toList();
     }
 
-    public Item update(String id, String itemName, String description) {
+    public Item update(String id, String itemName, String description, String type, String unit,
+                        BigDecimal defaultRate, String defaultGstPercent) {
         Item existing = get(id);
         String normalizedName = requireName(itemName);
         assertNameIsUnique(normalizedName, id);
 
-        Item updated = existing.withDetails(normalizedName, description);
+        Item updated = existing.withDetails(normalizedName, description, type, unit, defaultRate, defaultGstPercent);
         repository.save(updated);
 
         log.info("Item updated: {}", updated.itemName());

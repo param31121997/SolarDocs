@@ -15,6 +15,10 @@ export interface ItemFormDialogData {
 export interface ItemFormDialogResult {
   itemName: string;
   description: string;
+  type: string;
+  unit: string;
+  defaultRate: number | null;
+  defaultGstPercent: string;
 }
 
 /**
@@ -30,7 +34,8 @@ export interface ItemFormDialogResult {
     CommonModule, ReactiveFormsModule, MatDialogModule,
     MatFormFieldModule, MatInputModule, MatButtonModule, TranslatePipe
   ],
-  templateUrl: './item-form-dialog.component.html'
+  templateUrl: './item-form-dialog.component.html',
+  styleUrl: './item-form-dialog.component.scss'
 })
 export class ItemFormDialogComponent {
   private fb = inject(FormBuilder);
@@ -41,7 +46,11 @@ export class ItemFormDialogComponent {
 
   form = this.fb.group({
     itemName: [this.data.item?.itemName ?? '', [Validators.required, Validators.maxLength(150)]],
-    description: [this.data.item?.description ?? '', [Validators.maxLength(500)]]
+    description: [this.data.item?.description ?? '', [Validators.maxLength(500)]],
+    type: [this.data.item?.type ?? '', [Validators.maxLength(100)]],
+    unit: [this.data.item?.unit ?? '', [Validators.maxLength(30)]],
+    defaultRate: [this.data.item?.defaultRate ?? null, [Validators.min(0)]],
+    defaultGstPercent: [this.data.item?.defaultGstPercent ?? '', [Validators.maxLength(10)]]
   });
 
   save() {
@@ -51,7 +60,11 @@ export class ItemFormDialogComponent {
     }
     this.dialogRef.close({
       itemName: this.form.value.itemName!.trim(),
-      description: this.form.value.description?.trim() ?? ''
+      description: this.form.value.description?.trim() ?? '',
+      type: this.form.value.type?.trim() ?? '',
+      unit: this.form.value.unit?.trim() ?? '',
+      defaultRate: this.form.value.defaultRate ?? null,
+      defaultGstPercent: this.form.value.defaultGstPercent?.trim() ?? ''
     });
   }
 

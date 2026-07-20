@@ -4,6 +4,7 @@ import com.solardocs.api.common.ApiResponse;
 import com.solardocs.api.masterdata.dto.*;
 import com.solardocs.api.masterdata.mapper.ItemMapper;
 import com.solardocs.application.masterdata.ItemService;
+import com.solardocs.domain.masterdata.Item;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +32,9 @@ public class ItemController {
 
     @PostMapping
     public ApiResponse<ItemResponseDto> create(@Valid @RequestBody CreateItemRequestDto req) {
-        return ApiResponse.ok(mapper.toResponse(service.create(req.itemName(), req.description())));
+        Item created = service.create(req.itemName(), req.description(), req.type(), req.unit(),
+                req.defaultRate(), req.defaultGstPercent());
+        return ApiResponse.ok(mapper.toResponse(created));
     }
 
     @GetMapping
@@ -52,7 +55,9 @@ public class ItemController {
     @PutMapping("/{id}")
     public ApiResponse<ItemResponseDto> update(@PathVariable String id,
                                                 @Valid @RequestBody UpdateItemRequestDto req) {
-        return ApiResponse.ok(mapper.toResponse(service.update(id, req.itemName(), req.description())));
+        Item updated = service.update(id, req.itemName(), req.description(), req.type(), req.unit(),
+                req.defaultRate(), req.defaultGstPercent());
+        return ApiResponse.ok(mapper.toResponse(updated));
     }
 
     @PatchMapping("/{id}/active")

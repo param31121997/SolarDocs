@@ -213,6 +213,10 @@
     "updated": "Item updated",
     "deleted": "Item deleted",
     "deleteTitle": "Delete Item",
-    "deleteConfirm": "Delete \"{{name}}\"? This item will be hidden from selection but kept on record."
+    "deleteConfirm": "Delete \"{{name}}\"? This item will be hidden from selection but kept on record.",
+    "type": "Type",
+    "unit": "Unit",
+    "defaultRate": "Rate",
+    "defaultGstPercent": "GST %"
   }
 }

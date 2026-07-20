@@ -14,8 +14,32 @@
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>{{ 'item.description' | translate }}</mat-label>
-      <textarea matInput formControlName="description" rows="3" maxlength="500"></textarea>
+      <textarea matInput formControlName="description" rows="2" maxlength="500"></textarea>
     </mat-form-field>
+
+    <div class="field-row">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'item.type' | translate }}</mat-label>
+        <input matInput formControlName="type" maxlength="100" placeholder="e.g., Solar Panel">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'item.unit' | translate }}</mat-label>
+        <input matInput formControlName="unit" maxlength="30" placeholder="e.g., kW">
+      </mat-form-field>
+    </div>
+
+    <div class="field-row">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'item.defaultRate' | translate }}</mat-label>
+        <input matInput type="number" formControlName="defaultRate" min="0" placeholder="0.00">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'item.defaultGstPercent' | translate }}</mat-label>
+        <input matInput formControlName="defaultGstPercent" maxlength="10" placeholder="e.g., 18">
+      </mat-form-field>
+    </div>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">

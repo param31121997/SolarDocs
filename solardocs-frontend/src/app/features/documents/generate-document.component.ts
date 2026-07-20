@@ -11,7 +11,8 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { DocumentService } from '../../core/services/document.service';
-import { ProductCatalogService, Product } from '../../core/services/product-catalog.service';
+import { ItemService } from '../../core/services/item.service';
+import { Item } from '../../core/models/item.model';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
 
 @Component({
@@ -28,7 +29,7 @@ import { TranslatePipe } from '../../core/i18n/translate.pipe';
 export class GenerateDocumentComponent implements OnInit {
   customerId = input.required<string>();
   private docService = inject(DocumentService);
-  private productCatalogService = inject(ProductCatalogService);
+  private itemService = inject(ItemService);
   private snackBar = inject(MatSnackBar);
   private fb = inject(FormBuilder);
 
@@ -41,7 +42,7 @@ export class GenerateDocumentComponent implements OnInit {
   error = signal<string | null>(null);
   displayedColumns = ['slNo', 'product', 'item', 'type', 'qty', 'unit', 'rate', 'gstPercent', 'amount', 'actions'];
 
-  catalog = signal<Product[]>([]);
+  catalog = signal<Item[]>([]);
   isLoadingCatalog = signal(true);
   private catalogAutoPopulated = false;
 
@@ -73,16 +74,16 @@ export class GenerateDocumentComponent implements OnInit {
 
   loadCatalog() {
     this.isLoadingCatalog.set(true);
-    this.productCatalogService.list().subscribe({
-      next: (products) => {
-        console.log('Product catalog loaded:', products);
-        this.catalog.set(products || []);
+    this.itemService.list().subscribe({
+      next: (items) => {
+        console.log('Item Master catalog loaded:', items);
+        this.catalog.set(items || []);
         this.isLoadingCatalog.set(false);
       },
       error: (err) => {
         // Catalog is a convenience prefill, not a hard requirement - a
         // failure here should not block manual document generation.
-        console.warn('Failed to load product catalog, falling back to manual entry:', err);
+        console.warn('Failed to load Item Master, falling back to manual entry:', err);
         this.catalog.set([]);
         this.isLoadingCatalog.set(false);
       }
@@ -95,42 +96,42 @@ export class GenerateDocumentComponent implements OnInit {
     return items.length === 1 && !items[0].item && !items[0].qty && !items[0].rate;
   }
 
-  /** Replaces the line-item table with one row per catalog product (rate/type/unit prefilled, quantity left blank for the vendor to fill in). */
+  /** Replaces the line-item table with one row per Item Master entry (rate/type/unit prefilled, quantity left blank for the vendor to fill in). */
   loadFromCatalog() {
-    const products = this.catalog();
-    if (products.length === 0) {
-      this.snackBar.open('Product catalog is empty. Add products in Settings first.', 'Close', { duration: 4000 });
+    const items = this.catalog();
+    if (items.length === 0) {
+      this.snackBar.open('Item Master is empty. Add items in Master Data > Items first.', 'Close', { duration: 4000 });
       return;
     }
-    this.lineItems.set(products.map((p, idx) => ({
+    this.lineItems.set(items.map((it, idx) => ({
       slNo: idx + 1,
-      productCode: p.code,
-      item: p.name,
-      type: p.type,
+      productCode: it.id,
+      item: it.itemName,
+      type: it.type ?? '',
       qty: '',
-      unit: p.unit,
-      rate: p.defaultRate,
-      gstPercent: p.defaultGstPercent,
+      unit: it.unit ?? '',
+      rate: it.defaultRate ?? 0,
+      gstPercent: it.defaultGstPercent ?? '',
       amount: 0
     })));
   }
 
-  /** Applies a catalog product's defaults onto one existing row, keeping any quantity the vendor already typed. */
-  applyProduct(index: number, code: string) {
-    const product = this.catalog().find(p => p.code === code);
-    if (!product) {
+  /** Applies an Item Master item's defaults onto one existing row, keeping any quantity the vendor already typed. */
+  applyProduct(index: number, id: string) {
+    const item = this.catalog().find(it => it.id === id);
+    if (!item) {
       return;
     }
     this.lineItems.update(items => {
       const updated = [...items];
       updated[index] = {
         ...updated[index],
-        productCode: product.code,
-        item: product.name,
-        type: product.type,
-        unit: product.unit,
-        rate: product.defaultRate,
-        gstPercent: product.defaultGstPercent
+        productCode: item.id,
+        item: item.itemName,
+        type: item.type ?? '',
+        unit: item.unit ?? '',
+        rate: item.defaultRate ?? 0,
+        gstPercent: item.defaultGstPercent ?? ''
       };
       return updated;
     });
