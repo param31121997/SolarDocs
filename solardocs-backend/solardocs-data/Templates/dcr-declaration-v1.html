@@ -4,26 +4,43 @@
   <meta charset="UTF-8"/>
   <style>
     body { font-family: 'DejaVu Sans', sans-serif; font-size: 12px; line-height: 1.6; }
-    h1 { text-align: center; font-size: 15px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    td { padding: 4px; }
+    h1 { font-size: 14px; }
+    ol { margin-left: -15px; }
   </style>
 </head>
 <body>
-  <h1>Declaration of Domestic Content Requirement (DCR) Compliance</h1>
-  <p>Date: <span th:text="${date}"></span></p>
-  <p>This is to certify that the solar PV modules being supplied and installed for the
-     Rooftop Solar (RTS) project of <b th:text="${consumerName}"></b>
-     (Application No: <span th:text="${applicationNumber}"></span>,
-     Plant Capacity: <span th:text="${plantCapacityKw}"></span> kW) are DCR-compliant
-     and sourced from a manufacturer listed on the Approved List of Models and
-     Manufacturers (ALMM), as required under the PM Surya Ghar: Muft Bijli Yojana guidelines.</p>
-  <table>
-    <tr><td><b>Module Make:</b></td><td th:text="${moduleMake}"></td></tr>
-    <tr><td><b>Module Model:</b></td><td th:text="${moduleModel}"></td></tr>
-    <tr><td><b>ALMM Listing Reference:</b></td><td th:text="${almmListingRef}"></td></tr>
-    <tr><td><b>Declared By (Vendor):</b></td><td th:text="${vendorCompanyName}"></td></tr>
-  </table>
-  <p style="margin-top:60px;">Authorized Signatory: ___________________________</p>
+  <h1>Undertaking/Self-Declaration for Domestic Content Requirement fulfillment</h1>
+  <p style="text-align:center;">(On a plain Paper)</p>
+
+  <p>1. This is to certify that M/S <b th:text="${vendorCompanyName}"></b> has installed
+     <span th:text="${plantCapacityKw}"></span> KW Grid Connected Rooftop Solar Plant for
+     <b th:text="${consumerName}"></b> at <b th:text="${consumerAddress}"></b> under application number
+     <b th:text="${applicationNumber}"></b> dated <b th:text="${installationDate}"></b> under
+     <b th:text="${discom}"></b>.</p>
+
+  <p>2. It is hereby undertaken that the PV modules installed for the above-mentioned project are domestically
+     manufactured using domestic manufactured solar cells. The details of installed PV Modules are as follows:</p>
+  <ol>
+    <li>PV Module Capacity: <span th:text="${moduleCapacityKwp}"></span> Kwp</li>
+    <li>Number of PV Modules: <span th:text="${moduleCount}"></span></li>
+    <li>Sr No of PV Module: <span th:text="${moduleSerialNumbers}"></span></li>
+    <li>PV Module Make: <span th:text="${moduleMake}"></span></li>
+    <li>Cell manufacturer's name: <span th:text="${cellManufacturerName}"></span></li>
+    <li>Cell GST invoice No: <span th:text="${cellGstInvoiceNo}"></span></li>
+  </ol>
+
+  <p>3. The above undertaking is based on the certificate issued by the PV Module manufacturer/supplier while
+     supplying the above-mentioned order.</p>
+  <p>4. I, <span th:text="${vendorSignatoryName}"></span> on behalf of M/S <span th:text="${vendorCompanyName}"></span>
+     further declare that the information given above is true and correct and nothing has been concealed therein.
+     If anything is found incorrect at any stage, then REC/MNRE may take any appropriate action against my company
+     for wrong declaration. Supporting documents and proof of the above information will be provided as and when
+     requested by MNRE.</p>
+
+  <p style="margin-top:50px;">(Signature With official Seal)</p>
+  <p>For M/S <span th:text="${vendorCompanyName}"></span></p>
+  <p>Name: <span th:text="${vendorSignatoryName}"></span></p>
+  <p>Phone: <span th:text="${vendorPhone}"></span></p>
+  <p>Email: <span th:text="${vendorEmail}"></span></p>
 </body>
 </html>

@@ -4,22 +4,40 @@
   <meta charset="UTF-8"/>
   <style>
     body { font-family: 'DejaVu Sans', sans-serif; font-size: 12px; line-height: 1.6; }
-    h1 { text-align: center; font-size: 15px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    td { padding: 4px; border: 1px solid #333; }
+    h1 { text-align: center; font-size: 14px; color: #555; }
+    .sign-row { margin-top: 60px; display: flex; justify-content: space-between; }
   </style>
 </head>
 <body>
-  <h1>Commissioning Report</h1>
-  <p>Date: <span th:text="${date}"></span></p>
-  <table>
-    <tr><td><b>Consumer Name</b></td><td th:text="${consumerName}"></td></tr>
-    <tr><td><b>Consumer Number</b></td><td th:text="${consumerNumber}"></td></tr>
-    <tr><td><b>Application Number</b></td><td th:text="${applicationNumber}"></td></tr>
-    <tr><td><b>DISCOM</b></td><td th:text="${discom}"></td></tr>
-    <tr><td><b>Plant Capacity (kW)</b></td><td th:text="${plantCapacityKw}"></td></tr>
-    <tr><td><b>Inspection Date</b></td><td th:text="${inspectionDate}"></td></tr>
-  </table>
-  <p style="margin-top:60px;">Authorized Signatory: ___________________________</p>
+  <h1>Proforma-A<br/>COMMISSIONING REPORT (PROVISIONAL) FOR GRID CONNECTED SOLAR PHOTOVOLTAIC POWER PLANT (with Net-metering facility)</h1>
+
+  <p>
+    Certified that a Grid Connected SPV Power Plant of <b th:text="${plantCapacityKw}"></b> KWp capacity has been
+    installed at the site <b th:text="${siteAddress}"></b>, which has been installed by
+    <b th:text="${vendorCompanyName}"></b> on <b th:text="${installationDate}"></b>. The system is as per
+    BIS/MNRE specifications. The system has been checked for its performance and found in order for further
+    commissioning.
+  </p>
+  <p style="font-size:11px; color:#666;">
+    Consumer Number: <span th:text="${consumerNumber}"></span> &nbsp;|&nbsp;
+    Application Number: <span th:text="${applicationNumber}"></span> &nbsp;|&nbsp;
+    DISCOM: <span th:text="${discom}"></span>
+  </p>
+
+  <div class="sign-row">
+    <div>Signature of the beneficiary<br/>date</div>
+    <div>Signature of the agency with name, seal and date</div>
+  </div>
+
+  <p style="margin-top:40px;">
+    The above RTS installation has been inspected by me for Pre-Commissioning Testing of Roof Top Solar Connection
+    on dt. <span th:text="${inspectionDate}"></span>, as per guidelines issued vide letter no
+    <span th:text="${inspectionLetterNo}"></span> dt. <span th:text="${inspectionLetterDate}"></span>
+    and found in order for commissioning.
+  </p>
+
+  <p style="margin-top:30px;">
+    Signature of the MSEDCL Officer<br/>Name,<br/>Designation<br/>Date and seal
+  </p>
 </body>
 </html>

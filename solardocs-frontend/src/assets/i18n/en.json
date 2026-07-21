@@ -103,6 +103,7 @@
     "total": "Total",
     "amountInWords": "Amount in Words",
     "bankDetails": "Bank Details",
+    "additionalDetails": "Additional Details",
     "templates": {
       "QUOTATION": "Solar Quotation",
       "INVOICE": "Invoice",
@@ -110,7 +111,9 @@
       "DCR_DECLARATION": "DCR Declaration",
       "ANNEXURE_I": "Annexure-I",
       "NET_METER_AGREEMENT": "Net Meter Agreement",
-      "COMMISSIONING_REPORT": "Commissioning Report"
+      "COMMISSIONING_REPORT": "Commissioning Report (Proforma-A)",
+      "WORK_COMPLETION_REPORT": "Work Completion Report",
+      "GUARANTEE_CERTIFICATE": "Guarantee Certificate"
     },
     "types": {
       "AADHAAR": "Aadhaar Card",
@@ -145,6 +148,8 @@
     "bankAccountNumber": "Bank Account Number",
     "bankIfsc": "Bank IFSC",
     "signatoryName": "Signatory Name",
+    "phone": "Phone",
+    "email": "Email",
     "productCatalog": "Product Catalog",
     "documentTypes": "Document Types"
   },

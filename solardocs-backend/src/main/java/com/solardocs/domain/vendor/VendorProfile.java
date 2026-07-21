@@ -8,5 +8,7 @@ public record VendorProfile(
         String bankAccountName,
         String bankAccountNumber,
         String bankIfsc,
-        String signatoryName
+        String signatoryName,
+        String phone,
+        String email
 ) {}

@@ -103,6 +103,7 @@
     "total": "एकूण",
     "amountInWords": "शब्दांत रक्कम",
     "bankDetails": "बँक तपशील",
+    "additionalDetails": "अतिरिक्त तपशील",
     "templates": {
       "QUOTATION": "सोलर कोटेशन",
       "INVOICE": "इनव्हॉइस",
@@ -110,7 +111,9 @@
       "DCR_DECLARATION": "DCR घोषणापत्र",
       "ANNEXURE_I": "परिशिष्ट-I",
       "NET_METER_AGREEMENT": "नेट मीटर करार",
-      "COMMISSIONING_REPORT": "कमिशनिंग अहवाल"
+      "COMMISSIONING_REPORT": "कमिशनिंग अहवाल (प्रोफॉर्मा-A)",
+      "WORK_COMPLETION_REPORT": "कार्य पूर्णता अहवाल",
+      "GUARANTEE_CERTIFICATE": "हमी प्रमाणपत्र"
     },
     "types": {
       "AADHAAR": "आधार कार्ड",
@@ -145,6 +148,8 @@
     "bankAccountNumber": "बँक खाते क्रमांक",
     "bankIfsc": "बँक आयएफएससी",
     "signatoryName": "स्वाक्षरीकर्त्याचे नाव",
+    "phone": "फोन",
+    "email": "ईमेल",
     "productCatalog": "उत्पादन यादी",
     "documentTypes": "कागदपत्र प्रकार"
   },

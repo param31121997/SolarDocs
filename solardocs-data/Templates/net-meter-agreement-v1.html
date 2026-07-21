@@ -1,26 +1,49 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8"/>
   <style>
     body { font-family: 'DejaVu Sans', sans-serif; font-size: 12px; line-height: 1.6; }
     h1 { text-align: center; font-size: 15px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    td { padding: 4px; border: 1px solid #333; }
   </style>
 </head>
 <body>
-  <h1>Net Meter Agreement</h1>
-  <p>Date: <span th:text="${date}"></span></p>
-  <table>
-    <tr><td><b>Consumer Name</b></td><td th:text="${consumerName}"></td></tr>
-    <tr><td><b>Consumer Number</b></td><td th:text="${consumerNumber}"></td></tr>
-    <tr><td><b>Application Number</b></td><td th:text="${applicationNumber}"></td></tr>
-    <tr><td><b>DISCOM</b></td><td th:text="${discom}"></td></tr>
-    <tr><td><b>Plant Capacity (kW)</b></td><td th:text="${plantCapacityKw}"></td></tr>
-    <tr><td><b>Net Meter Serial No.</b></td><td th:text="${netMeterSerialNo}"></td></tr>
+  <h1>Net Metering Connection Agreement</h1>
+  <p>
+    This Agreement is made and entered into at <span th:text="${agreementPlace}"></span> on this
+    <span th:text="${date}"></span> between the Eligible Consumer <b th:text="${consumerName}"></b> having
+    premises at <b th:text="${consumerAddress}"></b> and Consumer No. <b th:text="${consumerNumber}"></b>
+    (Application No. <span th:text="${applicationNumber}"></span>) As the first Party,
+  </p>
+  <p style="text-align:center;">AND</p>
+  <p>
+    The Distribution Licensee &ndash; <b th:text="${discom}"></b> &ndash; as second Party of this Agreement.
+  </p>
+  <p>
+    Whereas, the Eligible Consumer has applied to the Licensee for approval of a Net Metering Arrangement under
+    the provisions of the Maharashtra Electricity Regulatory Commission (Net Metering for Roof-top Solar Photo
+    Voltaic Systems) Regulations, 2015 ('the Net Metering Regulations') and sought its connectivity to the
+    Licensee's Distribution Network; and whereas the Licensee has agreed to provide Network connectivity to the
+    Eligible Consumer for injection of electricity generated from its Roof-top Solar PV System of
+    <span th:text="${plantCapacityKw}"></span> kilowatt. Both Parties hereby agree to the Licensee's standard
+    terms of eligibility, technical and inter-connection requirements, safety, clearances, agreement period,
+    access and disconnection, liabilities, commercial settlement, connection costs, and dispute resolution as
+    applicable under the Net Metering Regulations.
+  </p>
+
+  <p style="margin-top:40px;">
+    In the witness whereof <b th:text="${vendorWitnessName}"></b> for and on behalf of the Eligible Consumer and
+    <b th:text="${consumerName}"></b> for and on behalf of the Distribution Licensee agree to this agreement.
+  </p>
+  <table style="width:100%; margin-top:30px;">
+    <tr>
+      <td>For Eligible Consumer</td>
+      <td>Shri. ------------------------------- for and on behalf of the Licensee</td>
+    </tr>
+    <tr>
+      <td>Witness 1 (Vendor): <span th:text="${vendorWitnessName}"></span></td>
+      <td>Witness 1:</td>
+    </tr>
   </table>
-  <!-- Transcribe the exact clause text from your DISCOM's official net-meter agreement here -->
-  <p style="margin-top:60px;">Signature of Consumer: ___________________________&nbsp;&nbsp;&nbsp;&nbsp;Signature of DISCOM Representative: ___________________________</p>
 </body>
 </html>

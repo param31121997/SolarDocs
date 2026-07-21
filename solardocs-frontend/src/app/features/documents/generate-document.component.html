@@ -152,6 +152,24 @@
         </div>
       </div>
 
+      <!-- Additional Details Section (for templates with fields not on Customer Details - see EXTRA_FIELD_DEFS) -->
+      <div *ngIf="currentExtraFieldDefs().length > 0" class="form-section extra-fields-section">
+        <h3>{{ 'document.additionalDetails' | translate }}</h3>
+        <p class="extra-fields-hint">
+          Everything already on this customer's Customer Details page (name, consumer number, address, capacity,
+          DISCOM, mobile, application number) is pulled in automatically. Fill in whatever's shown below - fields
+          with a value already filled in are defaults you can override; blank fields are specific to this document.
+        </p>
+        <div class="extra-fields-grid">
+          <mat-form-field appearance="outline" *ngFor="let f of currentExtraFieldDefs()">
+            <mat-label>{{ f.label }}</mat-label>
+            <input matInput [type]="f.type === 'date' ? 'date' : 'text'"
+                   [ngModel]="extraFieldValues()[f.key]"
+                   (ngModelChange)="setExtraField(f.key, $event)">
+          </mat-form-field>
+        </div>
+      </div>
+
       <!-- Action Buttons -->
       <div class="generate-actions">
         <button mat-raised-button color="primary" (click)="generate()" 

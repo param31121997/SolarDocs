@@ -31,7 +31,9 @@ public class AppDataDirectoryConfig {
             "dcr-declaration-v1.html",
             "annexure1-v1.html",
             "net-meter-agreement-v1.html",
-            "commissioning-report-v1.html"
+            "commissioning-report-v1.html",
+            "work-completion-report-v1.html",
+            "guarantee-certificate-v1.html"
     };
 
     private final String dataDir;

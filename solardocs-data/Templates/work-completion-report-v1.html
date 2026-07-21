@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <style>
+    body { font-family: 'DejaVu Sans', sans-serif; font-size: 12px; line-height: 1.5; }
+    h1 { text-align: center; font-size: 15px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    td { padding: 4px; border: 1px solid #333; }
+    .section-row td { background: #eee; font-weight: bold; text-align: center; }
+    .sign-row { margin-top: 40px; display: flex; justify-content: space-between; }
+  </style>
+</head>
+<body>
+  <h1>Work Completion Report for Solar Power Plant</h1>
+  <table>
+    <tr><td>1</td><td>Name</td><td th:text="${consumerName}"></td></tr>
+    <tr><td>2</td><td>Consumer number</td><td th:text="${consumerNumber}"></td></tr>
+    <tr><td>3</td><td>Site/Location with Complete Address</td>
+        <td th:text="${siteAddress + ', District: ' + district + ', State: ' + state + ', PIN Code: ' + pincode}"></td></tr>
+    <tr><td>4</td><td>Category: Govt/Private Sector</td><td th:text="${category}"></td></tr>
+    <tr><td>5</td><td>Sanction number</td><td th:text="${sanctionNumber}"></td></tr>
+    <tr><td>6</td><td>Sanctioned Capacity of solar PV system (KW) Installed</td><td th:text="${sanctionedCapacityKw}"></td></tr>
+    <tr><td>6</td><td>Capacity of solar PV system (KW)</td><td th:text="${installedCapacityKw}"></td></tr>
+    <tr class="section-row"><td colspan="3">Specification of the Modules</td></tr>
+    <tr><td>7</td><td>Make of Module</td><td th:text="${moduleMake}"></td></tr>
+    <tr><td>7</td><td>ALMM Model Number</td><td th:text="${almmModelNumber}"></td></tr>
+    <tr><td>7</td><td>Wattage per module</td><td th:text="${moduleWattage}"></td></tr>
+    <tr><td>7</td><td>No. of Module</td><td th:text="${moduleCount}"></td></tr>
+    <tr><td>7</td><td>Total Capacity (KWP)</td><td th:text="${moduleTotalCapacityKwp}"></td></tr>
+    <tr><td>7</td><td>Warrantee Details (Product + Performance)</td><td th:text="${warrantyDetails}"></td></tr>
+    <tr class="section-row"><td colspan="3">PCU</td></tr>
+    <tr><td>8</td><td>Make &amp; Model number of Inverter</td><td th:text="${inverterMake}"></td></tr>
+    <tr><td>8</td><td>Rating</td><td th:text="${inverterRating}"></td></tr>
+    <tr><td>8</td><td>Type of charge controller/ MPPT</td><td th:text="${chargeControllerType}"></td></tr>
+    <tr><td>8</td><td>Capacity of Inverter</td><td th:text="${inverterCapacityKw}"></td></tr>
+    <tr><td>8</td><td>HPD</td><td th:text="${hpd}"></td></tr>
+    <tr><td>8</td><td>Year of manufacturing</td><td th:text="${yearOfManufacturing}"></td></tr>
+    <tr class="section-row"><td colspan="3">Earthing and Protections</td></tr>
+    <tr><td>9</td><td>No of Separate Earthings with earth Resistance</td>
+        <td>
+          Earthing 1 : <span th:text="${earthing1Ohms}"></span> Ohms<br/>
+          Earthing 2 : <span th:text="${earthing2Ohms}"></span> Ohms<br/>
+          Earthing 3 : <span th:text="${earthing3Ohms}"></span> Ohms
+        </td></tr>
+    <tr><td>9</td><td>Earth Resistance measured &lt; 5 Ohms, certified by Licensed Electrical Contractor/Supervisor as per MNRE OM Dtd. 07.06.24 for CFA Component</td>
+        <td th:text="${earthResistanceCertified}"></td></tr>
+    <tr><td>9</td><td>Lightening Arrester</td><td th:text="${lightningArrester}"></td></tr>
+  </table>
+
+  <p style="margin-top:25px;">
+    We <b th:text="${vendorCompanyName}"></b> &amp; <b th:text="${consumerName}"></b> bearing Consumer Number
+    <span th:text="${consumerNumber}"></span> ensured structural stability of the installed solar power plant and
+    obtained requisite permissions from the concerned authority. If in future, by virtue of any means due to
+    collapsing or damage to the installed solar power plant, MSEDCL will not be held responsible for any loss to
+    property or human life, if any.
+  </p>
+  <p>
+    This is to certify the above installed Solar PV System is working properly with electrical safety &amp;
+    islanding switch, in case of any presence of backup inverter an arrangement should be made in such a way the
+    backup inverter supply should never be synchronized with the solar inverter to avoid any electrical accident
+    due to back feeding. We will be held responsible for non-working of the islanding mechanism and back-feed to
+    the de-energized grid.
+  </p>
+
+  <div class="sign-row">
+    <div>Signature [Vendor]</div>
+    <div>Signature [Consumer]</div>
+  </div>
+</body>
+</html>

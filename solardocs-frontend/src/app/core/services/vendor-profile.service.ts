@@ -13,6 +13,8 @@ export interface VendorProfile {
   bankAccountNumber: string;
   bankIfsc: string;
   signatoryName: string;
+  phone: string;
+  email: string;
 }
 
 @Injectable({ providedIn: 'root' })

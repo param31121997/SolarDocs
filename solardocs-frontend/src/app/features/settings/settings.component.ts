@@ -35,7 +35,9 @@ export class SettingsComponent implements OnInit {
     bankAccountName: [''],
     bankAccountNumber: [''],
     bankIfsc: [''],
-    signatoryName: ['']
+    signatoryName: [''],
+    phone: [''],
+    email: ['']
   });
 
   productForm = this.fb.group({

@@ -1,25 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8"/>
   <style>
     body { font-family: 'DejaVu Sans', sans-serif; font-size: 12px; line-height: 1.6; }
     h1 { text-align: center; font-size: 15px; }
+    h2 { text-align: center; font-size: 13px; color: #555; }
     table { width: 100%; border-collapse: collapse; margin-top: 15px; }
     td { padding: 4px; border: 1px solid #333; }
   </style>
 </head>
 <body>
-  <h1>Annexure-I &ndash; Application Declaration</h1>
+  <h1>Annexure-I</h1>
+  <h2>(Commissioning Report for RE System)</h2>
   <p>Date: <span th:text="${date}"></span></p>
   <table>
-    <tr><td><b>Consumer Name</b></td><td th:text="${consumerName}"></td></tr>
-    <tr><td><b>Consumer Number</b></td><td th:text="${consumerNumber}"></td></tr>
-    <tr><td><b>Application Number</b></td><td th:text="${applicationNumber}"></td></tr>
-    <tr><td><b>DISCOM</b></td><td th:text="${discom}"></td></tr>
-    <tr><td><b>Plant Capacity (kW)</b></td><td th:text="${plantCapacityKw}"></td></tr>
+    <tr><td>1</td><td>Name of the Consumer</td><td th:text="${consumerName}"></td></tr>
+    <tr><td>2</td><td>Consumer Number</td><td th:text="${consumerNumber}"></td></tr>
+    <tr><td>3</td><td>Mobile Number</td><td th:text="${mobile}"></td></tr>
+    <tr><td>4</td><td>E-mail</td><td th:text="${email}"></td></tr>
+    <tr><td>5</td><td>Address of Installation</td><td th:text="${addressOfInstallation + ', District: ' + district}"></td></tr>
+    <tr><td>6</td><td>RE Arrangement Type</td><td th:text="${reArrangementType}"></td></tr>
+    <tr><td>7</td><td>RE Source</td><td th:text="${reSource}"></td></tr>
+    <tr><td>8</td><td>Sanctioned Capacity (KW)</td><td th:text="${sanctionedCapacityKw}"></td></tr>
+    <tr><td>9</td><td>Capacity Type</td><td th:text="${capacityType}"></td></tr>
+    <tr><td>10</td><td>Project Model</td><td th:text="${projectModel}"></td></tr>
+    <tr><td>11</td><td>RE installed Capacity (Rooftop) (KW)</td><td th:text="${reInstalledCapacityRooftopKw}"></td></tr>
+    <tr><td>12</td><td>RE installed Capacity (Rooftop + Ground) (KW)</td><td th:text="${reInstalledCapacityRooftopGroundKw}"></td></tr>
+    <tr><td>13</td><td>RE installed Capacity (Ground) (KW)</td><td th:text="${reInstalledCapacityGroundKw}"></td></tr>
+    <tr><td>14</td><td>Installation date</td><td th:text="${installationDate}"></td></tr>
+    <tr><td>15</td><td>Inverter Capacity (KW)</td><td th:text="${inverterCapacityKw}"></td></tr>
+    <tr><td></td><td>Inverter Make</td><td th:text="${inverterMake}"></td></tr>
+    <tr><td></td><td>No. of PV Modules</td><td th:text="${moduleCount}"></td></tr>
+    <tr><td></td><td>Module Capacity (KW)</td><td th:text="${moduleCapacityKw}"></td></tr>
   </table>
-  <!-- Transcribe the exact clause text from your official MSEDCL/MNRE Annexure-I here -->
   <p style="margin-top:60px;">Signature of Applicant: ___________________________</p>
 </body>
 </html>

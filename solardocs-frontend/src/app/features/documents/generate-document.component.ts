@@ -16,6 +16,85 @@ import { ItemService } from '../../core/services/item.service';
 import { Item } from '../../core/models/item.model';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
 
+/** One field on the "Additional Details" panel for a non-quotation/invoice template. `default` mirrors the fallback the backend strategy applies via extraFields.getOrDefault(...) - present it means the field is a "default + dynamic" (yellow) value; absent means it's purely dynamic (red) and starts blank. */
+export interface ExtraFieldDef {
+  key: string;
+  label: string;
+  default?: string;
+  type?: 'text' | 'date';
+}
+
+/** Per-template extra field definitions, matching the Map keys each *GenerationStrategy.java reads via extraFields. Fields already available on the Customer Details screen (name, consumer number, address, capacity, DISCOM, application number, mobile) are NOT listed here - the backend pulls those straight from the Customer record. */
+export const EXTRA_FIELD_DEFS: Record<string, ExtraFieldDef[]> = {
+  WORK_COMPLETION_REPORT: [
+    { key: 'vendorCompanyName', label: 'Vendor Company Name (blank = use Settings > Vendor Profile)' },
+    { key: 'category', label: 'Category (Govt/Private)', default: 'Private' },
+    { key: 'sanctionNumber', label: 'Sanction Number (blank = use Application Number)' },
+    { key: 'installationDate', label: 'Installation Date', type: 'date' },
+    { key: 'moduleMake', label: 'Module Make', default: 'Mundra Solar PV Limited (Adani)' },
+    { key: 'almmModelNumber', label: 'ALMM Model Number', default: 'ASB-M10-144' },
+    { key: 'moduleWattage', label: 'Wattage per Module (W)' },
+    { key: 'moduleCount', label: 'No. of Modules' },
+    { key: 'moduleTotalCapacityKwp', label: 'Total Module Capacity (KWP) (blank = use Plant Capacity)' },
+    { key: 'warrantyDetails', label: 'Warranty Details (Product + Performance)', default: '25 years' },
+    { key: 'inverterMake', label: 'Inverter Make & Model' },
+    { key: 'inverterRating', label: 'Inverter Rating' },
+    { key: 'chargeControllerType', label: 'Type of Charge Controller / MPPT' },
+    { key: 'inverterCapacityKw', label: 'Capacity of Inverter (KW)' },
+    { key: 'hpd', label: 'HPD' },
+    { key: 'yearOfManufacturing', label: 'Year of Manufacturing', default: String(new Date().getFullYear()) },
+    { key: 'earthing1Ohms', label: 'Earthing 1 (Ohms)' },
+    { key: 'earthing2Ohms', label: 'Earthing 2 (Ohms)' },
+    { key: 'earthing3Ohms', label: 'Earthing 3 (Ohms)' },
+    { key: 'earthResistanceCertified', label: 'Earth Resistance Certified (<5 Ohms)', default: 'Yes' },
+    { key: 'lightningArrester', label: 'Lightning Arrester', default: 'Yes' }
+  ],
+  GUARANTEE_CERTIFICATE: [
+    { key: 'vendorCompanyName', label: 'Vendor Company Name (blank = use Settings > Vendor Profile)' },
+    { key: 'cmcYears', label: 'CMC Period (Years)', default: '5' },
+    { key: 'aadhaarNumber', label: 'Consumer Aadhaar Number' }
+  ],
+  ANNEXURE_I: [
+    { key: 'email', label: 'Consumer E-mail' },
+    { key: 'installationDate', label: 'Installation Date', type: 'date' },
+    { key: 'inverterCapacityKw', label: 'Inverter Capacity (KW)' },
+    { key: 'inverterMake', label: 'Inverter Make' },
+    { key: 'moduleCount', label: 'No. of PV Modules' },
+    { key: 'moduleCapacityKw', label: 'Module Capacity (KW)' },
+    { key: 'reArrangementType', label: 'RE Arrangement Type', default: 'Net Metering Arrangement' },
+    { key: 'reSource', label: 'RE Source', default: 'Solar' },
+    { key: 'capacityType', label: 'Capacity Type', default: 'Rooftop' },
+    { key: 'projectModel', label: 'Project Model', default: 'capex' },
+    { key: 'reInstalledCapacityRooftopGroundKw', label: 'RE Installed Capacity - Rooftop+Ground (KW)', default: 'NA' },
+    { key: 'reInstalledCapacityGroundKw', label: 'RE Installed Capacity - Ground (KW)', default: 'NA' }
+  ],
+  COMMISSIONING_REPORT: [
+    { key: 'vendorCompanyName', label: 'Vendor Company Name (blank = use Settings > Vendor Profile)' },
+    { key: 'installationDate', label: 'Installation Date', type: 'date' },
+    { key: 'inspectionDate', label: 'Pre-Commissioning Inspection Date', type: 'date' },
+    { key: 'inspectionLetterNo', label: 'Inspection Guideline Letter No.' },
+    { key: 'inspectionLetterDate', label: 'Inspection Guideline Letter Date', type: 'date' }
+  ],
+  DCR_DECLARATION: [
+    { key: 'vendorCompanyName', label: 'Vendor Company Name (blank = use Settings > Vendor Profile)' },
+    { key: 'vendorSignatoryName', label: 'Vendor Signatory Name (blank = use Settings > Vendor Profile)' },
+    { key: 'vendorPhone', label: 'Vendor Phone (blank = use Settings > Vendor Profile)' },
+    { key: 'vendorEmail', label: 'Vendor Email (blank = use Settings > Vendor Profile)' },
+    { key: 'installationDate', label: 'Installation Date', type: 'date' },
+    { key: 'moduleCapacityKwp', label: 'Module Capacity (KWp) (blank = use Plant Capacity)' },
+    { key: 'moduleCount', label: 'No. of PV Modules' },
+    { key: 'moduleSerialNumbers', label: 'PV Module Serial Numbers (comma-separated)' },
+    { key: 'cellManufacturerName', label: "Cell Manufacturer's Name" },
+    { key: 'cellGstInvoiceNo', label: 'Cell GST Invoice No.' },
+    { key: 'moduleMake', label: 'PV Module Make', default: 'Adani' }
+  ],
+  NET_METER_AGREEMENT: [
+    { key: 'vendorWitnessName', label: 'Witness (Vendor) Name (blank = use Settings > Vendor Profile)' },
+    { key: 'agreementPlace', label: 'Place of Agreement' },
+    { key: 'netMeterSerialNo', label: 'Net Meter Serial No.' }
+  ]
+};
+
 @Component({
   selector: 'app-generate-document',
   standalone: true,
@@ -47,6 +126,13 @@ export class GenerateDocumentComponent implements OnInit {
   isLoadingCatalog = signal(true);
   private catalogAutoPopulated = false;
 
+  /** Values for the current template's "Additional Details" fields (see EXTRA_FIELD_DEFS), keyed by field key. Rebuilt whenever the selected template changes. */
+  extraFieldValues = signal<Record<string, string>>({});
+  private lastExtraFieldsTemplate = '';
+
+  /** The field definitions to render for the currently selected template - empty for QUOTATION/INVOICE, which use the line-item table instead. */
+  currentExtraFieldDefs = computed<ExtraFieldDef[]>(() => EXTRA_FIELD_DEFS[this.selectedTemplate()] ?? []);
+
   /** Sum of every line's Amount (GST-inclusive), shown as the table's Total row. */
   totalAmount = computed(() => this.lineItems().reduce((sum, l) => sum + (parseFloat(l.amount) || 0), 0));
 
@@ -55,7 +141,31 @@ export class GenerateDocumentComponent implements OnInit {
     return !!(row.unit && String(row.unit).trim());
   }
 
+  /** Two-way binding helper for a single extra field's value. */
+  setExtraField(key: string, value: string) {
+    this.extraFieldValues.update(v => ({ ...v, [key]: value }));
+  }
+
   constructor() {
+    // Whenever the selected template changes to one with its own
+    // "Additional Details" fields, (re)build the value map from that
+    // template's field defs - defaults pre-filled (mirroring the
+    // backend's extraFields.getOrDefault fallback), dynamic fields blank.
+    // Only resets when the template actually changes, so it never wipes
+    // out values the vendor is mid-way through typing.
+    effect(() => {
+      const template = this.selectedTemplate();
+      const defs = this.currentExtraFieldDefs();
+      if (template !== this.lastExtraFieldsTemplate) {
+        this.lastExtraFieldsTemplate = template;
+        const values: Record<string, string> = {};
+        for (const d of defs) {
+          values[d.key] = d.default ?? '';
+        }
+        this.extraFieldValues.set(values);
+      }
+    });
+
     // Whenever both the catalog and a QUOTATION/INVOICE template selection
     // are available, and the line-item table is still in its untouched
     // default state, prefill it from the vendor's product catalog. This
@@ -282,9 +392,13 @@ export class GenerateDocumentComponent implements OnInit {
     this.isLoading.set(true);
     this.error.set(null);
 
-    const payload = {
-      lineItems: this.lineItems()
-    };
+    // QUOTATION/INVOICE send their line-item table; every other template
+    // sends the "Additional Details" values collected for it above -
+    // whatever the vendor left blank falls back to the backend's own
+    // default (see each *GenerationStrategy.java's extraFields.getOrDefault).
+    const payload = (templateCode === 'QUOTATION' || templateCode === 'INVOICE')
+      ? { lineItems: this.lineItems() }
+      : { ...this.extraFieldValues() };
 
     console.log('Sending generation request:', {
       customerId: this.customerId(),
