@@ -63,6 +63,22 @@ public class CustomerController {
         return ApiResponse.ok(customerMapper.toResponse(c));
     }
 
+    @PutMapping("/{id}/plant-details")
+    public ApiResponse<CustomerResponseDto> updatePlantDetails(@PathVariable String id,
+                                                                 @RequestBody UpdatePlantDetailsRequestDto req) {
+        var details = new com.solardocs.domain.customer.PlantInstallationDetails(
+                req.email(), req.installationDate(), req.inverterMake(), req.inverterRating(),
+                req.inverterCapacityKw(), req.chargeControllerType(), req.hpd(),
+                req.earthing1Ohms(), req.earthing2Ohms(), req.earthing3Ohms(),
+                req.moduleWattage(), req.moduleCount(), req.moduleCapacityKw(), req.moduleSerialNumbers(),
+                req.cellManufacturerName(), req.cellGstInvoiceNo(), req.aadhaarNumber(),
+                req.inspectionDate(), req.inspectionLetterNo(), req.inspectionLetterDate(),
+                req.agreementPlace(), req.netMeterSerialNo()
+        );
+        Customer c = customerService.updatePlantDetails(id, details);
+        return ApiResponse.ok(customerMapper.toResponse(c));
+    }
+
     @PatchMapping("/{id}/status")
     public ApiResponse<CustomerResponseDto> updateStatus(@PathVariable String id, @Valid @RequestBody UpdateStatusRequestDto req) {
         Customer c = customerService.updateStatus(id, CustomerStatus.valueOf(req.status()));

@@ -40,8 +40,11 @@ public class NetMeterAgreementGenerationStrategy implements DocumentGenerationSt
 
         model.put("vendorWitnessName", extraFields.getOrDefault("vendorWitnessName",
                 vendor != null && vendor.companyName() != null ? vendor.companyName() : ""));
-        model.put("agreementPlace", extraFields.getOrDefault("agreementPlace", ""));
-        model.put("netMeterSerialNo", extraFields.getOrDefault("netMeterSerialNo", ""));
+        var pd = customer.getPlantDetails();
+        model.put("agreementPlace", FieldResolver.resolve(extraFields, "agreementPlace", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::agreementPlace, ""));
+        model.put("netMeterSerialNo", FieldResolver.resolve(extraFields, "netMeterSerialNo", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::netMeterSerialNo, ""));
 
         return model;
     }

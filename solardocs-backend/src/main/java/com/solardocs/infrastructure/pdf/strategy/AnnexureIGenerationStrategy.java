@@ -33,13 +33,20 @@ public class AnnexureIGenerationStrategy implements DocumentGenerationStrategy {
         model.put("plantCapacityKw", customer.getPlantCapacityKw() != null ? customer.getPlantCapacityKw().toString() : "");
         model.put("reInstalledCapacityRooftopKw", customer.getPlantCapacityKw() != null ? customer.getPlantCapacityKw().toString() : "");
 
-        // --- Not on Customer: collected on the Generate Document screen ---
-        model.put("email", extraFields.getOrDefault("email", ""));
-        model.put("installationDate", extraFields.getOrDefault("installationDate", ""));
-        model.put("inverterCapacityKw", extraFields.getOrDefault("inverterCapacityKw", ""));
-        model.put("inverterMake", extraFields.getOrDefault("inverterMake", ""));
-        model.put("moduleCount", extraFields.getOrDefault("moduleCount", ""));
-        model.put("moduleCapacityKw", extraFields.getOrDefault("moduleCapacityKw", ""));
+        // --- Now saved on Customer > Plant Details, filled once and reused ---
+        var pd = customer.getPlantDetails();
+        model.put("email", FieldResolver.resolve(extraFields, "email", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::email, ""));
+        model.put("installationDate", FieldResolver.resolve(extraFields, "installationDate", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::installationDate, ""));
+        model.put("inverterCapacityKw", FieldResolver.resolve(extraFields, "inverterCapacityKw", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::inverterCapacityKw, ""));
+        model.put("inverterMake", FieldResolver.resolve(extraFields, "inverterMake", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::inverterMake, ""));
+        model.put("moduleCount", FieldResolver.resolve(extraFields, "moduleCount", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::moduleCount, ""));
+        model.put("moduleCapacityKw", FieldResolver.resolve(extraFields, "moduleCapacityKw", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::moduleCapacityKw, ""));
         model.put("reInstalledCapacityRooftopGroundKw", extraFields.getOrDefault("reInstalledCapacityRooftopGroundKw", "NA"));
         model.put("reInstalledCapacityGroundKw", extraFields.getOrDefault("reInstalledCapacityGroundKw", "NA"));
 

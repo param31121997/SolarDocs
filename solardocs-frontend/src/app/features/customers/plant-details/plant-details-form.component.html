@@ -1,0 +1,33 @@
+<div class="plant-details">
+  <p class="hint">
+    Fill these in once - every compliance document (Work Completion Report,
+    Guarantee Certificate, Annexure-I, Proforma-A, DCR Declaration, Net Meter
+    Agreement) pulls from these values automatically. Anything left blank
+    just prints blank on the documents; nothing here is required to save.
+  </p>
+
+  <div *ngIf="isLoading()" class="loading"><mat-spinner diameter="32"></mat-spinner></div>
+
+  <div *ngIf="loadError()" class="load-error">{{ loadError() }}</div>
+
+  <form *ngIf="!isLoading() && !loadError()" [formGroup]="form" (ngSubmit)="save()">
+    <div class="field-group" *ngFor="let group of groups">
+      <h4>{{ group.title }}</h4>
+      <div class="field-grid">
+        <mat-form-field appearance="outline" *ngFor="let field of group.fields">
+          <mat-label>{{ field.label }}</mat-label>
+          <input matInput [formControlName]="field.key"
+                 [type]="field.type === 'date' ? 'text' : 'text'"
+                 [placeholder]="field.type === 'date' ? 'dd/mm/yyyy' : ''">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="save-row">
+      <button mat-raised-button color="primary" type="submit" [disabled]="isSaving()">
+        <mat-icon>save</mat-icon>
+        {{ isSaving() ? 'Saving…' : 'Save Plant Details' }}
+      </button>
+    </div>
+  </form>
+</div>

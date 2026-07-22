@@ -33,6 +33,16 @@ export class CustomerService {
     return this.http.patch<ApiResponse<Customer>>(`${this.base}/${id}/status`, { status }).pipe(map(r => r.data));
   }
 
+  /**
+   * Saves the installation/technical facts (module & inverter specs,
+   * serial numbers, Aadhaar, inspection info, net meter serial no,
+   * agreement place) once on the customer, so the compliance document
+   * strategies can pull them instead of asking again per document.
+   */
+  updatePlantDetails(id: string, payload: Record<string, string | undefined>): Observable<Customer> {
+    return this.http.put<ApiResponse<Customer>>(`${this.base}/${id}/plant-details`, payload).pipe(map(r => r.data));
+  }
+
   archive(id: string): Observable<void> {
     return this.http.delete<ApiResponse<void>>(`${this.base}/${id}`).pipe(map(() => undefined));
   }

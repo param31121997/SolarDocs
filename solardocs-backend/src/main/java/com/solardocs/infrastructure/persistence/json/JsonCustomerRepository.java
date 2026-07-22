@@ -74,6 +74,7 @@ public class JsonCustomerRepository implements CustomerRepository {
                         customer.getGeneratedDocuments().stream()
                                 .map(d -> new CustomerJsonRecord.GeneratedDocRecord(d.id(), d.templateCode(), d.templateVersion(), d.filePath(), d.generatedAt()))
                                 .toList(),
+                        toRecord(customer.getPlantDetails()),
                         customer.getCreatedAt(), customer.getUpdatedAt()
                 );
                 json.writeAtomic(customerFile, record);
@@ -116,7 +117,34 @@ public class JsonCustomerRepository implements CustomerRepository {
                         .map(d -> new com.solardocs.domain.document.GeneratedDocument(
                                 d.id(), d.templateCode(), d.templateVersion(), d.filePath(), d.generatedAt()))
                         .toList(),
+                toDomain(rec.plantDetails()),
                 rec.createdAt(), rec.updatedAt()
+        );
+    }
+
+    private static CustomerJsonRecord.PlantDetailsRecord toRecord(com.solardocs.domain.customer.PlantInstallationDetails d) {
+        d = com.solardocs.domain.customer.PlantInstallationDetails.orEmpty(d);
+        return new CustomerJsonRecord.PlantDetailsRecord(
+                d.email(), d.installationDate(), d.inverterMake(), d.inverterRating(),
+                d.inverterCapacityKw(), d.chargeControllerType(), d.hpd(),
+                d.earthing1Ohms(), d.earthing2Ohms(), d.earthing3Ohms(),
+                d.moduleWattage(), d.moduleCount(), d.moduleCapacityKw(), d.moduleSerialNumbers(),
+                d.cellManufacturerName(), d.cellGstInvoiceNo(), d.aadhaarNumber(),
+                d.inspectionDate(), d.inspectionLetterNo(), d.inspectionLetterDate(),
+                d.agreementPlace(), d.netMeterSerialNo()
+        );
+    }
+
+    private static com.solardocs.domain.customer.PlantInstallationDetails toDomain(CustomerJsonRecord.PlantDetailsRecord r) {
+        if (r == null) return com.solardocs.domain.customer.PlantInstallationDetails.empty();
+        return new com.solardocs.domain.customer.PlantInstallationDetails(
+                r.email(), r.installationDate(), r.inverterMake(), r.inverterRating(),
+                r.inverterCapacityKw(), r.chargeControllerType(), r.hpd(),
+                r.earthing1Ohms(), r.earthing2Ohms(), r.earthing3Ohms(),
+                r.moduleWattage(), r.moduleCount(), r.moduleCapacityKw(), r.moduleSerialNumbers(),
+                r.cellManufacturerName(), r.cellGstInvoiceNo(), r.aadhaarNumber(),
+                r.inspectionDate(), r.inspectionLetterNo(), r.inspectionLetterDate(),
+                r.agreementPlace(), r.netMeterSerialNo()
         );
     }
 }

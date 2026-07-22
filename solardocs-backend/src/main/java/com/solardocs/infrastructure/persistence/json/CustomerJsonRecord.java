@@ -24,9 +24,21 @@ public record CustomerJsonRecord(
         boolean archived,
         List<UploadedDocRecord> uploadedDocuments,
         List<GeneratedDocRecord> generatedDocuments,
+        PlantDetailsRecord plantDetails,
         Instant createdAt,
         Instant updatedAt
 ) {
     public record UploadedDocRecord(String id, String type, String fileName, String filePath, Instant uploadedAt) {}
     public record GeneratedDocRecord(String id, String templateCode, String templateVersion, String filePath, Instant generatedAt) {}
+
+    /** Mirrors domain PlantInstallationDetails - kept as a separate JSON-layer record (rather than reusing the domain type directly) so the persistence format doesn't change if the domain shape ever does. */
+    public record PlantDetailsRecord(
+            String email, String installationDate, String inverterMake, String inverterRating,
+            String inverterCapacityKw, String chargeControllerType, String hpd,
+            String earthing1Ohms, String earthing2Ohms, String earthing3Ohms,
+            String moduleWattage, String moduleCount, String moduleCapacityKw, String moduleSerialNumbers,
+            String cellManufacturerName, String cellGstInvoiceNo, String aadhaarNumber,
+            String inspectionDate, String inspectionLetterNo, String inspectionLetterDate,
+            String agreementPlace, String netMeterSerialNo
+    ) {}
 }

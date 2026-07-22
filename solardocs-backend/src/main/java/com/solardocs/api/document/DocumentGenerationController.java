@@ -46,4 +46,46 @@ public class DocumentGenerationController {
             return ApiResponse.fail("PDF_GENERATION_ERROR", "Failed to generate document: " + e.getMessage());
         }
     }
+
+    /**
+     * One-click generation of the full compliance document set (see
+     * DocumentGenerationService.COMPLIANCE_PACKAGE_TEMPLATE_CODES), merged
+     * into a single PDF. No form/extraFields - everything is pulled from
+     * the Customer record (including Customer > Plant Details) and the
+     * vendor's Settings profile.
+     */
+    @PostMapping("/customers/{id}/documents/generate-package")
+    public ApiResponse<GeneratedDocument> generatePackage(@PathVariable String id) {
+        try {
+            if (id == null || id.isBlank()) {
+                return ApiResponse.fail("INVALID_CUSTOMER_ID", "Customer ID is required");
+            }
+            GeneratedDocument doc = generationService.generatePackage(id);
+            return ApiResponse.ok(doc);
+        } catch (IllegalArgumentException e) {
+            return ApiResponse.fail("INVALID_REQUEST", e.getMessage());
+        } catch (Exception e) {
+            return ApiResponse.fail("PDF_GENERATION_ERROR", "Failed to generate compliance package: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Streams a previously generated PDF back inline (not as a download)
+     * so the UI can show it in an iframe right after generation, for the
+     * vendor to verify before handing it to the consumer/DISCOM.
+     */
+    @GetMapping("/customers/{id}/documents/generated/{docId}/view")
+    public org.springframework.http.ResponseEntity<byte[]> viewGenerated(@PathVariable String id, @PathVariable String docId) {
+        try {
+            byte[] bytes = generationService.readGeneratedDocument(id, docId);
+            return org.springframework.http.ResponseEntity.ok()
+                    .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION, "inline; filename=" + docId + ".pdf")
+                    .contentType(org.springframework.http.MediaType.APPLICATION_PDF)
+                    .body(bytes);
+        } catch (IllegalArgumentException e) {
+            return org.springframework.http.ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return org.springframework.http.ResponseEntity.internalServerError().build();
+        }
+    }
 }

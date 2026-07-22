@@ -33,9 +33,10 @@ public class GuaranteeCertificateGenerationStrategy implements DocumentGeneratio
                 "vendorCompanyName", extraFields.getOrDefault("vendorCompanyName",
                         vendor != null && vendor.companyName() != null ? vendor.companyName() : ""),
                 "cmcYears", extraFields.getOrDefault("cmcYears", "5"),                 // yellow, default
-                // Aadhaar is identity/KYC data, not currently tracked on Customer -
-                // collected on the Generate Document screen for this document only.
-                "aadhaarNumber", extraFields.getOrDefault("aadhaarNumber", "")
+                // Aadhaar now lives on Customer > Plant Details, filled once and
+                // reused here - extraFields can still override it per-generation.
+                "aadhaarNumber", FieldResolver.resolve(extraFields, "aadhaarNumber", customer.getPlantDetails(),
+                        com.solardocs.domain.customer.PlantInstallationDetails::aadhaarNumber, "")
         );
     }
 }

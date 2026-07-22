@@ -49,6 +49,19 @@ export class DocumentService {
       { templateCode, extraFields }
     ).pipe(map(r => this.unwrap(r)));
   }
+
+  /**
+   * One-click generation of the full compliance document set (Work
+   * Completion Report, Guarantee Certificate, Annexure-I, Proforma-A,
+   * DCR Declaration, Net Meter Agreement), merged into a single PDF.
+   * No form fields - everything comes from the Customer record
+   * (including Plant Details) and the vendor's Settings profile.
+   */
+  generatePackage(customerId: string): Observable<any> {
+    return this.http.post<ApiResponse<any>>(
+      `${this.base}/customers/${customerId}/documents/generate-package`, {}
+    ).pipe(map(r => this.unwrap(r)));
+  }
 }
 
 export interface UploadedDocument {

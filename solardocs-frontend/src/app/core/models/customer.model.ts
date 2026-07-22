@@ -24,6 +24,30 @@ export interface Customer {
   discom?: string;
   category?: string;
   status: string;
+  // Installation/technical facts filled once on the "Plant Details" tab and
+  // reused by every compliance document strategy - see PlantInstallationDetails.java
+  plantEmail?: string;
+  plantInstallationDate?: string;
+  plantInverterMake?: string;
+  plantInverterRating?: string;
+  plantInverterCapacityKw?: string;
+  plantChargeControllerType?: string;
+  plantHpd?: string;
+  plantEarthing1Ohms?: string;
+  plantEarthing2Ohms?: string;
+  plantEarthing3Ohms?: string;
+  plantModuleWattage?: string;
+  plantModuleCount?: string;
+  plantModuleCapacityKw?: string;
+  plantModuleSerialNumbers?: string;
+  plantCellManufacturerName?: string;
+  plantCellGstInvoiceNo?: string;
+  plantAadhaarNumber?: string;
+  plantInspectionDate?: string;
+  plantInspectionLetterNo?: string;
+  plantInspectionLetterDate?: string;
+  plantAgreementPlace?: string;
+  plantNetMeterSerialNo?: string;
   createdAt: string;
   updatedAt: string;
 }

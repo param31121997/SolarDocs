@@ -59,27 +59,39 @@ public class WorkCompletionReportGenerationStrategy implements DocumentGeneratio
         model.put("category", extraFields.getOrDefault("category", "Private"));               // yellow, default
         model.put("sanctionNumber", extraFields.getOrDefault("sanctionNumber",
                 customer.getApplicationNumber() != null ? customer.getApplicationNumber() : ""));
-        model.put("installationDate", extraFields.getOrDefault("installationDate", ""));
+        var pd = customer.getPlantDetails();
+        model.put("installationDate", FieldResolver.resolve(extraFields, "installationDate", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::installationDate, ""));
 
         model.put("moduleMake", extraFields.getOrDefault("moduleMake", "Mundra Solar PV Limited (Adani)")); // yellow
         model.put("almmModelNumber", extraFields.getOrDefault("almmModelNumber", "ASB-M10-144"));            // yellow
-        model.put("moduleWattage", extraFields.getOrDefault("moduleWattage", ""));
-        model.put("moduleCount", extraFields.getOrDefault("moduleCount", ""));
+        model.put("moduleWattage", FieldResolver.resolve(extraFields, "moduleWattage", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::moduleWattage, ""));
+        model.put("moduleCount", FieldResolver.resolve(extraFields, "moduleCount", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::moduleCount, ""));
         model.put("moduleTotalCapacityKwp", extraFields.getOrDefault("moduleTotalCapacityKwp",
                 customer.getPlantCapacityKw() != null ? customer.getPlantCapacityKw().toString() : ""));
         model.put("warrantyDetails", extraFields.getOrDefault("warrantyDetails", "25 years"));               // yellow
 
-        model.put("inverterMake", extraFields.getOrDefault("inverterMake", ""));
-        model.put("inverterRating", extraFields.getOrDefault("inverterRating", ""));
-        model.put("chargeControllerType", extraFields.getOrDefault("chargeControllerType", ""));
-        model.put("inverterCapacityKw", extraFields.getOrDefault("inverterCapacityKw", ""));
-        model.put("hpd", extraFields.getOrDefault("hpd", ""));
+        model.put("inverterMake", FieldResolver.resolve(extraFields, "inverterMake", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::inverterMake, ""));
+        model.put("inverterRating", FieldResolver.resolve(extraFields, "inverterRating", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::inverterRating, ""));
+        model.put("chargeControllerType", FieldResolver.resolve(extraFields, "chargeControllerType", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::chargeControllerType, ""));
+        model.put("inverterCapacityKw", FieldResolver.resolve(extraFields, "inverterCapacityKw", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::inverterCapacityKw, ""));
+        model.put("hpd", FieldResolver.resolve(extraFields, "hpd", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::hpd, ""));
         model.put("yearOfManufacturing", extraFields.getOrDefault("yearOfManufacturing",
                 String.valueOf(LocalDate.now().getYear())));                                                 // yellow
 
-        model.put("earthing1Ohms", extraFields.getOrDefault("earthing1Ohms", ""));
-        model.put("earthing2Ohms", extraFields.getOrDefault("earthing2Ohms", ""));
-        model.put("earthing3Ohms", extraFields.getOrDefault("earthing3Ohms", ""));
+        model.put("earthing1Ohms", FieldResolver.resolve(extraFields, "earthing1Ohms", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::earthing1Ohms, ""));
+        model.put("earthing2Ohms", FieldResolver.resolve(extraFields, "earthing2Ohms", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::earthing2Ohms, ""));
+        model.put("earthing3Ohms", FieldResolver.resolve(extraFields, "earthing3Ohms", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::earthing3Ohms, ""));
         model.put("earthResistanceCertified", extraFields.getOrDefault("earthResistanceCertified", "Yes"));  // yellow
         model.put("lightningArrester", extraFields.getOrDefault("lightningArrester", "Yes"));                // yellow
 

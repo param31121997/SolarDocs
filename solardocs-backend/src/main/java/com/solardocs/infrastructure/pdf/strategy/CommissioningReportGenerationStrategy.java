@@ -40,10 +40,15 @@ public class CommissioningReportGenerationStrategy implements DocumentGeneration
 
         model.put("vendorCompanyName", extraFields.getOrDefault("vendorCompanyName",
                 vendor != null && vendor.companyName() != null ? vendor.companyName() : ""));
-        model.put("installationDate", extraFields.getOrDefault("installationDate", ""));
-        model.put("inspectionDate", extraFields.getOrDefault("inspectionDate", ""));
-        model.put("inspectionLetterNo", extraFields.getOrDefault("inspectionLetterNo", ""));
-        model.put("inspectionLetterDate", extraFields.getOrDefault("inspectionLetterDate", ""));
+        var pd = customer.getPlantDetails();
+        model.put("installationDate", FieldResolver.resolve(extraFields, "installationDate", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::installationDate, ""));
+        model.put("inspectionDate", FieldResolver.resolve(extraFields, "inspectionDate", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::inspectionDate, ""));
+        model.put("inspectionLetterNo", FieldResolver.resolve(extraFields, "inspectionLetterNo", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::inspectionLetterNo, ""));
+        model.put("inspectionLetterDate", FieldResolver.resolve(extraFields, "inspectionLetterDate", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::inspectionLetterDate, ""));
 
         return model;
     }

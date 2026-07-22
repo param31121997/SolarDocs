@@ -32,6 +32,12 @@
       </div>
     </mat-tab>
 
+    <mat-tab label="Plant Details">
+      <div class="tab-content">
+        <app-plant-details-form [customerId]="c.customerId"></app-plant-details-form>
+      </div>
+    </mat-tab>
+
     <mat-tab [label]="'customer.generatedPdfs' | translate">
       <div class="tab-content">
         <app-generate-document [customerId]="c.customerId"></app-generate-document>

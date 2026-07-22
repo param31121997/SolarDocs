@@ -4,7 +4,53 @@
       <mat-card-title>{{ 'document.generateDocument' | translate }}</mat-card-title>
     </mat-card-header>
 
-    <mat-card-content *ngIf="!isLoading()">
+    <mat-card-content>
+      <!-- One-Click Compliance Package: generates WCR, Guarantee Certificate, Annexure-I,
+           Proforma-A, DCR Declaration and Net Meter Agreement in one go, merged into a
+           single PDF, using only data already saved on this customer (Customer Details +
+           Plant Details) and Settings > Vendor Profile - no form to fill in here. -->
+      <div class="package-section">
+        <h3>Generate Full Compliance Package (1-Click)</h3>
+        <p class="package-hint">
+          Generates the Work Completion Report, Guarantee Certificate, Annexure-I,
+          Proforma-A (Commissioning Report), DCR Declaration and Net Meter Agreement
+          together as one merged PDF. Values come from Customer Details, Plant Details
+          and Vendor Profile - fill those in first for a complete set; anything left
+          blank there just prints blank.
+        </p>
+        <button mat-raised-button color="accent" (click)="generatePackage()"
+                [disabled]="isGeneratingPackage()" class="package-btn">
+          <mat-icon>library_add_check</mat-icon>
+          {{ isGeneratingPackage() ? 'Generating package…' : 'Generate Full Compliance Package' }}
+        </button>
+        <div *ngIf="packageGenerated()" class="success-message">
+          <mat-icon>check_circle</mat-icon>
+          <p>Compliance package generated: {{ packageGenerated() }}</p>
+        </div>
+        <div *ngIf="packageError()" class="error-message">
+          <mat-icon>error</mat-icon>
+          <p>{{ packageError() }}</p>
+        </div>
+      </div>
+
+      <!-- Shared preview: whichever document was just generated (single
+           template or the package) shows here so it can be verified before
+           being sent anywhere. Generating something new replaces it. -->
+      <div class="preview-panel" *ngIf="previewUrl()">
+        <div class="preview-panel-header">
+          <h3>Verify: {{ previewDoc()?.label }}</h3>
+          <button mat-icon-button (click)="closePreview()" aria-label="Close preview">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <iframe [src]="previewUrl()" class="preview-frame" title="Generated document preview"></iframe>
+      </div>
+
+      <mat-divider class="package-divider" *ngIf="templates().length > 0"></mat-divider>
+      <p class="individual-hint" *ngIf="templates().length > 0">Or generate (and override) a single document below:</p>
+    </mat-card-content>
+
+    <mat-card-content *ngIf="!isLoading() && templates().length > 0">
       <!-- Error Message Display -->
       <div *ngIf="error()" class="error-message">
         <mat-icon>error</mat-icon>

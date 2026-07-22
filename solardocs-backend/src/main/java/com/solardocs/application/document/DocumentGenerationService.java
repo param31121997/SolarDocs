@@ -97,6 +97,10 @@ public class DocumentGenerationService {
             Files.write(targetFile, pdfBytes);
             log.info("PDF saved to: {}", targetFile);
 
+            // Generating again replaces the previous copy of this document -
+            // no piling up of duplicate PDFs for the same template.
+            customerService.replaceGeneratedDocuments(customerId, java.util.Set.of(templateCode));
+
             // Create GeneratedDocument record
             GeneratedDocument doc = new GeneratedDocument(docId, templateCode, template.version(), targetFile.toString(), Instant.now());
 
@@ -115,6 +119,98 @@ public class DocumentGenerationService {
             log.error("Unexpected error generating {} for {}: {}", templateCode, customerId, e.getMessage(), e);
             throw new RuntimeException("Failed generating " + templateCode + " for " + customerId + ": " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * The document set called out in the vendor's compliance guidelines
+     * (Work Completion Report, Guarantee Certificate + Aadhaar, Annexure-I,
+     * Proforma-A / Commissioning Report, DCR Declaration, Net Meter
+     * Agreement), in the order they appear there. Brochure/datasheet and
+     * site photographs are uploaded files, not generated from a template,
+     * so they aren't part of this list - see the Documents tab for those.
+     */
+    public static final java.util.List<String> COMPLIANCE_PACKAGE_TEMPLATE_CODES = java.util.List.of(
+            "WORK_COMPLETION_REPORT", "GUARANTEE_CERTIFICATE", "ANNEXURE_I",
+            "COMMISSIONING_REPORT", "DCR_DECLARATION", "NET_METER_AGREEMENT"
+    );
+
+    /**
+     * Generates every document in COMPLIANCE_PACKAGE_TEMPLATE_CODES for a
+     * customer and merges them into one PDF, in a single call - no
+     * per-document form. Every field comes from the Customer record
+     * (including its Plant Details) and the vendor's Settings profile;
+     * each strategy is called with an empty extraFields map, so it always
+     * falls through to whatever is saved there (see FieldResolver).
+     */
+    public GeneratedDocument generatePackage(String customerId) {
+        if (customerId == null || customerId.isBlank()) {
+            throw new IllegalArgumentException("Customer ID cannot be null or empty");
+        }
+        try {
+            log.info("Starting compliance package generation for customer: {}", customerId);
+            Customer customer = customerService.get(customerId);
+
+            var merger = new org.apache.pdfbox.multipdf.PDFMergerUtility();
+            var mergedOut = new java.io.ByteArrayOutputStream();
+            merger.setDestinationStream(mergedOut);
+
+            for (String templateCode : COMPLIANCE_PACKAGE_TEMPLATE_CODES) {
+                DocumentTemplate template = templateService.getByCode(templateCode);
+                var strategy = strategyFactory.resolve(templateCode);
+                Map<String, Object> model = strategy.buildModel(customer, Map.of());
+                byte[] pdfBytes = pdfRenderer.render(template.htmlFile(), model);
+                if (pdfBytes == null || pdfBytes.length == 0) {
+                    throw new RuntimeException("PDF rendering returned empty bytes for template: " + templateCode);
+                }
+                merger.addSource(new org.apache.pdfbox.io.RandomAccessReadBuffer(pdfBytes));
+            }
+            merger.mergeDocuments(org.apache.pdfbox.io.IOUtils.createMemoryOnlyStreamCache());
+            byte[] mergedBytes = mergedOut.toByteArray();
+
+            Path customerFolder = findCustomerFolder(customerId);
+            if (customerFolder == null) {
+                throw new RuntimeException("Customer folder not found for: " + customerId);
+            }
+            Path pdfDir = customerFolder.resolve("GeneratedPDF");
+            Files.createDirectories(pdfDir);
+
+            String docId = UUID.randomUUID().toString();
+            String fileName = "COMPLIANCE_PACKAGE_v1_" + System.currentTimeMillis() + ".pdf";
+            Path targetFile = pdfDir.resolve(fileName);
+            Files.write(targetFile, mergedBytes);
+            log.info("Compliance package saved to: {}", targetFile);
+
+            // Regenerating the package replaces the previous merged PDF -
+            // no piling up of duplicate compliance packages.
+            customerService.replaceGeneratedDocuments(customerId, java.util.Set.of("COMPLIANCE_PACKAGE"));
+
+            GeneratedDocument doc = new GeneratedDocument(docId, "COMPLIANCE_PACKAGE", "v1", targetFile.toString(), Instant.now());
+            customerService.addGeneratedDocument(customerId, doc);
+            log.info("Compliance package generation complete for customer: {}", customerId);
+            return doc;
+        } catch (IllegalArgumentException e) {
+            log.error("Validation error during compliance package generation: {}", e.getMessage());
+            throw e;
+        } catch (IOException e) {
+            log.error("IO error during compliance package generation for customer: {}", customerId, e);
+            throw new RuntimeException("Failed to save compliance package: " + e.getMessage(), e);
+        } catch (Exception e) {
+            log.error("Unexpected error generating compliance package for {}: {}", customerId, e.getMessage(), e);
+            throw new RuntimeException("Failed generating compliance package for " + customerId + ": " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Loads the bytes for one of this customer's already-generated PDFs,
+     * for inline preview/verification in the UI right after generation.
+     */
+    public byte[] readGeneratedDocument(String customerId, String docId) throws IOException {
+        Customer customer = customerService.get(customerId);
+        GeneratedDocument doc = customer.getGeneratedDocuments().stream()
+                .filter(d -> d.id().equals(docId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Generated document not found: " + docId));
+        return Files.readAllBytes(Path.of(doc.filePath()));
     }
 
     /**

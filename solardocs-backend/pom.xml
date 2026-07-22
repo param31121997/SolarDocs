@@ -55,6 +55,15 @@
     <version>1.1.40</version>
 </dependency>
 
+        <!-- PDF merging (compliance package = several rendered PDFs combined into one).
+             Already pulled in transitively by openhtmltopdf-pdfbox above, declared
+             explicitly here since DocumentGenerationService now uses its merge API directly. -->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>3.0.5</version>
+        </dependency>
+
         <!-- Standalone Thymeleaf templating (render to a String, not a view) -->
         <dependency>
             <groupId>org.thymeleaf</groupId>

@@ -48,14 +48,20 @@ public class DcrDeclarationGenerationStrategy implements DocumentGenerationStrat
         model.put("vendorEmail", extraFields.getOrDefault("vendorEmail",
                 vendor != null && vendor.email() != null ? vendor.email() : ""));
 
-        // --- Not tracked anywhere yet: collected on the Generate Document screen ---
-        model.put("installationDate", extraFields.getOrDefault("installationDate", ""));
+        // --- Now saved on Customer > Plant Details, filled once and reused ---
+        var pd = customer.getPlantDetails();
+        model.put("installationDate", FieldResolver.resolve(extraFields, "installationDate", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::installationDate, ""));
         model.put("moduleCapacityKwp", extraFields.getOrDefault("moduleCapacityKwp",
                 customer.getPlantCapacityKw() != null ? customer.getPlantCapacityKw().toString() : ""));
-        model.put("moduleCount", extraFields.getOrDefault("moduleCount", ""));
-        model.put("moduleSerialNumbers", extraFields.getOrDefault("moduleSerialNumbers", ""));
-        model.put("cellManufacturerName", extraFields.getOrDefault("cellManufacturerName", ""));
-        model.put("cellGstInvoiceNo", extraFields.getOrDefault("cellGstInvoiceNo", ""));
+        model.put("moduleCount", FieldResolver.resolve(extraFields, "moduleCount", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::moduleCount, ""));
+        model.put("moduleSerialNumbers", FieldResolver.resolve(extraFields, "moduleSerialNumbers", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::moduleSerialNumbers, ""));
+        model.put("cellManufacturerName", FieldResolver.resolve(extraFields, "cellManufacturerName", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::cellManufacturerName, ""));
+        model.put("cellGstInvoiceNo", FieldResolver.resolve(extraFields, "cellGstInvoiceNo", pd,
+                com.solardocs.domain.customer.PlantInstallationDetails::cellGstInvoiceNo, ""));
 
         // --- Yellow: default + dynamic ---
         model.put("moduleMake", extraFields.getOrDefault("moduleMake", "Adani"));

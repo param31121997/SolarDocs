@@ -11,13 +11,15 @@ import { Customer } from '../../../core/models/customer.model';
 import { TranslatePipe } from '../../../core/i18n/translate.pipe';
 import { GenerateDocumentComponent } from '../../documents/generate-document.component';
 import { CustomerDocumentsComponent } from '../../documents/customer-documents.component';
+import { PlantDetailsFormComponent } from '../plant-details/plant-details-form.component';
 
 @Component({
   selector: 'app-customer-detail',
   standalone: true,
   imports: [
     CommonModule, MatTabsModule, MatButtonModule, MatFormFieldModule, MatSelectModule,
-    MatSnackBarModule, TranslatePipe, GenerateDocumentComponent, CustomerDocumentsComponent
+    MatSnackBarModule, TranslatePipe, GenerateDocumentComponent, CustomerDocumentsComponent,
+    PlantDetailsFormComponent
   ],
   templateUrl: './customer-detail.component.html',
   styleUrl: './customer-detail.component.scss'

@@ -26,6 +26,7 @@ public class Customer {
     private boolean archived;
     private final List<UploadedDocument> uploadedDocuments = new ArrayList<>();
     private final List<GeneratedDocument> generatedDocuments = new ArrayList<>();
+    private PlantInstallationDetails plantDetails = PlantInstallationDetails.empty();
     private final Instant createdAt;
     private Instant updatedAt;
 
@@ -42,6 +43,7 @@ public class Customer {
         c.name = name;
         c.mobile = mobile;
         c.address = address;
+        c.plantDetails = PlantInstallationDetails.empty();
         return c;
     }
 
@@ -51,6 +53,7 @@ public class Customer {
                                      String discom, String category, CustomerStatus status, boolean archived,
                                      List<UploadedDocument> uploadedDocuments,
                                      List<GeneratedDocument> generatedDocuments,
+                                     PlantInstallationDetails plantDetails,
                                      Instant createdAt, Instant updatedAt) {
         Customer customer = new Customer(id, createdAt);
         customer.name = name;
@@ -67,6 +70,7 @@ public class Customer {
         customer.archived = archived;
         customer.uploadedDocuments.addAll(uploadedDocuments == null ? List.of() : uploadedDocuments);
         customer.generatedDocuments.addAll(generatedDocuments == null ? List.of() : generatedDocuments);
+        customer.plantDetails = PlantInstallationDetails.orEmpty(plantDetails);
         customer.updatedAt = updatedAt == null ? createdAt : updatedAt;
         return customer;
     }
@@ -87,8 +91,32 @@ public class Customer {
         this.updatedAt = Instant.now();
     }
 
+    /**
+     * Removes every generated document matching the given template code(s),
+     * returning the removed entries so the caller can delete their files
+     * from disk. Used right before saving a fresh generation of the same
+     * document(s), so re-generating never leaves stale duplicate PDFs
+     * behind - there's only ever one current copy of each document.
+     */
+    public List<GeneratedDocument> removeGeneratedDocuments(java.util.Set<String> templateCodes) {
+        List<GeneratedDocument> removed = new ArrayList<>();
+        generatedDocuments.removeIf(d -> {
+            boolean match = templateCodes.contains(d.templateCode());
+            if (match) removed.add(d);
+            return match;
+        });
+        if (!removed.isEmpty()) this.updatedAt = Instant.now();
+        return removed;
+    }
+
     public void archive() {
         this.archived = true;
+        this.updatedAt = Instant.now();
+    }
+
+    /** Replaces the installation/technical details used by the compliance document set - see PlantInstallationDetails. */
+    public void updatePlantDetails(PlantInstallationDetails plantDetails) {
+        this.plantDetails = PlantInstallationDetails.orEmpty(plantDetails);
         this.updatedAt = Instant.now();
     }
 
@@ -125,6 +153,7 @@ public class Customer {
     public boolean isArchived() { return archived; }
     public List<UploadedDocument> getUploadedDocuments() { return uploadedDocuments; }
     public List<GeneratedDocument> getGeneratedDocuments() { return generatedDocuments; }
+    public PlantInstallationDetails getPlantDetails() { return plantDetails; }
     public Instant getCreatedAt() { return createdAt; }
     public Instant getUpdatedAt() { return updatedAt; }
 }

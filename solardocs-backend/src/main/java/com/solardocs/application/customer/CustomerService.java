@@ -54,12 +54,43 @@ public class CustomerService {
         return customer;
     }
 
+    public Customer updatePlantDetails(String customerId, com.solardocs.domain.customer.PlantInstallationDetails details) {
+        Customer customer = get(customerId);
+        customer.updatePlantDetails(details);
+        customerRepository.save(customer);
+        return customer;
+    }
+
     public Customer updateStatus(String customerId, CustomerStatus status) {
         Customer customer = get(customerId);
         customer.updateStatus(status);
         customerRepository.save(customer);
         reindex(customer);
         return customer;
+    }
+
+    /**
+     * Removes any previously generated documents matching templateCodes
+     * from the customer record, deletes their files from disk, and
+     * persists the change. Call this immediately before saving a new
+     * generation of the same document(s) so re-generating replaces the
+     * old copy instead of accumulating duplicates.
+     */
+    public void replaceGeneratedDocuments(String customerId, java.util.Set<String> templateCodes) {
+        Customer customer = get(customerId);
+        var removed = customer.removeGeneratedDocuments(templateCodes);
+        customerRepository.save(customer);
+        for (var doc : removed) {
+            try {
+                java.nio.file.Files.deleteIfExists(java.nio.file.Path.of(doc.filePath()));
+            } catch (java.io.IOException e) {
+                // Not fatal - the DB record is already gone, which is what matters
+                // for "no duplicates in the UI"; an orphaned file can be cleaned
+                // up later and doesn't block the new generation from proceeding.
+                org.slf4j.LoggerFactory.getLogger(CustomerService.class)
+                        .warn("Could not delete old generated file {}: {}", doc.filePath(), e.getMessage());
+            }
+        }
     }
 
     public Customer addGeneratedDocument(String customerId, GeneratedDocument document) {

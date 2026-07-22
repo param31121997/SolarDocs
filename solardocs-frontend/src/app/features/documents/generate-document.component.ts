@@ -1,5 +1,7 @@
 import { Component, inject, input, OnInit, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { environment } from '../../../environments/environment';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -11,6 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
 import { DocumentService } from '../../core/services/document.service';
 import { ItemService } from '../../core/services/item.service';
 import { Item } from '../../core/models/item.model';
@@ -101,7 +104,7 @@ export const EXTRA_FIELD_DEFS: Record<string, ExtraFieldDef[]> = {
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatSelectModule,
     MatAutocompleteModule, MatInputModule, MatButtonModule, MatTableModule, MatProgressSpinnerModule,
-    MatSnackBarModule, MatCardModule, MatIconModule, TranslatePipe
+    MatSnackBarModule, MatCardModule, MatIconModule, MatDividerModule, TranslatePipe
   ],
   templateUrl: './generate-document.component.html',
   styleUrl: './generate-document.component.scss'
@@ -112,12 +115,31 @@ export class GenerateDocumentComponent implements OnInit {
   private itemService = inject(ItemService);
   private snackBar = inject(MatSnackBar);
   private fb = inject(FormBuilder);
+  private sanitizer = inject(DomSanitizer);
+
+  /**
+   * Whatever document was generated most recently (single template or the
+   * compliance package) - shown as an inline PDF preview so the vendor can
+   * verify it before sending it anywhere. Selecting a new one (from either
+   * flow) replaces this - only ever one preview showing at a time, mirroring
+   * the backend only ever keeping one current file per document.
+   */
+  previewDoc = signal<{ id: string; label: string } | null>(null);
+  previewUrl = computed<SafeResourceUrl | null>(() => {
+    const doc = this.previewDoc();
+    if (!doc) return null;
+    const url = `${environment.apiBaseUrl}/customers/${this.customerId()}/documents/generated/${doc.id}/view`;
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  });
 
   templates = signal<any[]>([]);
   selectedTemplate = signal<string>('');
   lineItems = signal<any[]>([{ slNo: 1, item: '', type: '', qty: '', unit: '', rate: 0, gstPercent: '', amount: 0 }]);
   generatedFile = signal<string | null>(null);
   isLoading = signal(false);
+  isGeneratingPackage = signal(false);
+  packageGenerated = signal<string | null>(null);
+  packageError = signal<string | null>(null);
   isLoadingTemplates = signal(true);
   error = signal<string | null>(null);
   displayedColumns = ['slNo', 'item', 'type', 'qty', 'unit', 'rate', 'gstPercent', 'amount', 'actions'];
@@ -287,15 +309,28 @@ export class GenerateDocumentComponent implements OnInit {
     });
   }
 
+  // The 6 compliance documents are only generated via the 1-click
+  // "Generate Full Compliance Package" button now - they're intentionally
+  // excluded here so the manual per-template form only ever offers the
+  // documents that still need a one-off form (quotation/invoice line
+  // items, agreement terms).
+  private readonly PACKAGE_TEMPLATE_CODES = new Set([
+    'WORK_COMPLETION_REPORT', 'GUARANTEE_CERTIFICATE', 'ANNEXURE_I',
+    'COMMISSIONING_REPORT', 'DCR_DECLARATION', 'NET_METER_AGREEMENT'
+  ]);
+
   loadTemplates() {
     console.log('Loading templates from API...');
     this.isLoadingTemplates.set(true);
     this.error.set(null);
 
     this.docService.listTemplates().subscribe({
-      next: (templates) => {
-        console.log('Templates loaded successfully:', templates);
-        
+      next: (allTemplates) => {
+        console.log('Templates loaded successfully:', allTemplates);
+        const templates = Array.isArray(allTemplates)
+          ? allTemplates.filter(t => !this.PACKAGE_TEMPLATE_CODES.has(t.code))
+          : allTemplates;
+
         if (templates && Array.isArray(templates) && templates.length > 0) {
           this.templates.set(templates);
           
@@ -306,10 +341,9 @@ export class GenerateDocumentComponent implements OnInit {
           
           this.isLoadingTemplates.set(false);
         } else {
-          const msg = 'No templates available';
-          console.warn(msg);
-          this.error.set(msg);
-          this.snackBar.open(msg, 'Close', { duration: 5000, panelClass: ['error-snackbar'] });
+          // Nothing left to show manually is fine - it just means every
+          // template is part of the compliance package above. Not an error.
+          this.templates.set([]);
           this.isLoadingTemplates.set(false);
         }
       },
@@ -411,17 +445,13 @@ export class GenerateDocumentComponent implements OnInit {
         console.log('Document generated successfully:', doc);
         this.isLoading.set(false);
         this.generatedFile.set(doc.filePath || doc.toString());
-        
+        this.previewDoc.set({ id: doc.id, label: templateCode });
+
         const successMsg = 'Document generated successfully!';
         this.snackBar.open(successMsg, 'Close', {
           duration: 5000,
           panelClass: ['success-snackbar']
         });
-        
-        // Reset form after successful generation
-        setTimeout(() => {
-          this.generatedFile.set(null);
-        }, 5000);
       },
       error: (err) => {
         console.error('Document generation failed:', err);
@@ -442,6 +472,39 @@ export class GenerateDocumentComponent implements OnInit {
         this.snackBar.open(errMsg, 'Close', { duration: 7000, panelClass: ['error-snackbar'] });
       }
     });
+  }
+
+  /**
+   * One-click generation of the full compliance document set, merged into
+   * a single PDF - no form, no re-typing anything already saved on this
+   * customer (Customer Details + Plant Details) or in Settings > Vendor
+   * Profile. Fields left blank on Plant Details simply render blank in
+   * the PDF - fill in Plant Details first for a complete package.
+   */
+  generatePackage() {
+    this.packageError.set(null);
+    this.isGeneratingPackage.set(true);
+    this.docService.generatePackage(this.customerId()).subscribe({
+      next: (doc) => {
+        this.isGeneratingPackage.set(false);
+        this.packageGenerated.set(doc.filePath || doc.toString());
+        this.previewDoc.set({ id: doc.id, label: 'Compliance Package' });
+        this.snackBar.open('Compliance package generated successfully!', 'Close', {
+          duration: 5000,
+          panelClass: ['success-snackbar']
+        });
+      },
+      error: (err) => {
+        this.isGeneratingPackage.set(false);
+        const msg = err?.error?.message || err?.message || 'Failed to generate compliance package';
+        this.packageError.set(msg);
+        this.snackBar.open(msg, 'Close', { duration: 7000, panelClass: ['error-snackbar'] });
+      }
+    });
+  }
+
+  closePreview() {
+    this.previewDoc.set(null);
   }
 
   /**

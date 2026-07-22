@@ -9,6 +9,13 @@ public record CustomerResponseDto(
         String consumerNumber, String applicationNumber,
         BigDecimal sanctionedLoadKw, BigDecimal plantCapacityKw,
         String discom, String category, String status,
+        String plantEmail, String plantInstallationDate, String plantInverterMake, String plantInverterRating,
+        String plantInverterCapacityKw, String plantChargeControllerType, String plantHpd,
+        String plantEarthing1Ohms, String plantEarthing2Ohms, String plantEarthing3Ohms,
+        String plantModuleWattage, String plantModuleCount, String plantModuleCapacityKw, String plantModuleSerialNumbers,
+        String plantCellManufacturerName, String plantCellGstInvoiceNo, String plantAadhaarNumber,
+        String plantInspectionDate, String plantInspectionLetterNo, String plantInspectionLetterDate,
+        String plantAgreementPlace, String plantNetMeterSerialNo,
         Instant createdAt, Instant updatedAt
 ) {
 }
