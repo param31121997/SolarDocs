@@ -16,7 +16,7 @@ existing file, "OVERWRITE-DATA" = a data/template file, not source code.
 - api/masterdata/dto/ItemResponseDto.java
 - api/masterdata/mapper/ItemMapper.java
 - api/masterdata/ItemController.java
-
+ 
 API: GET/POST /api/master/items, GET/PUT /api/master/items/{id},
 PATCH /api/master/items/{id}/active, DELETE /api/master/items/{id}.
 Storage: MasterData/items.json.
