@@ -5,10 +5,10 @@ package com.solardocs.api.customer.dto;
  * (often incrementally, as installation/commissioning progresses).
  * Every field here maps 1:1 to PlantInstallationDetails and is reused
  * by every compliance document strategy instead of being asked again
- * per document.
+ * per document. Consumer identity fields (email, Aadhaar number) live
+ * on Customer/UpdateCustomerRequestDto instead - see CustomerController.
  */
 public record UpdatePlantDetailsRequestDto(
-        String email,
         String installationDate,
         String inverterMake,
         String inverterRating,
@@ -24,7 +24,6 @@ public record UpdatePlantDetailsRequestDto(
         String moduleSerialNumbers,
         String cellManufacturerName,
         String cellGstInvoiceNo,
-        String aadhaarNumber,
         String inspectionDate,
         String inspectionLetterNo,
         String inspectionLetterDate,

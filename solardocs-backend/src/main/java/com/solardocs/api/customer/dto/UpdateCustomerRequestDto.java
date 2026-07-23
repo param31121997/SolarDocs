@@ -9,6 +9,8 @@ public record UpdateCustomerRequestDto(
         @NotBlank String name,
         @NotBlank @Pattern(regexp = "\\d{10}") String mobile,
         @Pattern(regexp = "^$|\\d{10}") String alternateMobile,
+        String email,
+        String aadhaarNumber,
         String addressLine,
         String village,
         String district,

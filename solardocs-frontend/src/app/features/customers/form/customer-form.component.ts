@@ -27,6 +27,8 @@ export class CustomerFormComponent implements OnInit {
     name: ['', Validators.required],
     mobile: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
     alternateMobile: ['', Validators.pattern(/^$|\d{10}$/)],
+    email: [''],
+    aadhaarNumber: [''],
     addressLine: [''],
     village: [''],
     district: [''],
@@ -56,7 +58,9 @@ export class CustomerFormComponent implements OnInit {
     const request = editingId
       ? this.customerService.update(editingId, value as Partial<Customer>)
       : this.customerService.create({
-          name: value.name ?? '', mobile: value.mobile ?? '', addressLine: value.addressLine ?? '',
+          name: value.name ?? '', mobile: value.mobile ?? '',
+          email: value.email ?? '', aadhaarNumber: value.aadhaarNumber ?? '',
+          addressLine: value.addressLine ?? '',
           village: value.village ?? '', district: value.district ?? '', state: value.state ?? '',
           pincode: value.pincode ?? ''
         });

@@ -12,6 +12,8 @@ export interface Customer {
   name: string;
   mobile: string;
   alternateMobile?: string;
+  email?: string;
+  aadhaarNumber?: string;
   addressLine?: string;
   village?: string;
   district?: string;
@@ -26,7 +28,7 @@ export interface Customer {
   status: string;
   // Installation/technical facts filled once on the "Plant Details" tab and
   // reused by every compliance document strategy - see PlantInstallationDetails.java
-  plantEmail?: string;
+  // (email/Aadhaar live above with the rest of the consumer's identity, not here)
   plantInstallationDate?: string;
   plantInverterMake?: string;
   plantInverterRating?: string;
@@ -42,7 +44,6 @@ export interface Customer {
   plantModuleSerialNumbers?: string;
   plantCellManufacturerName?: string;
   plantCellGstInvoiceNo?: string;
-  plantAadhaarNumber?: string;
   plantInspectionDate?: string;
   plantInspectionLetterNo?: string;
   plantInspectionLetterDate?: string;

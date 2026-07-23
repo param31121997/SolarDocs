@@ -25,10 +25,8 @@ interface FieldDef {
  */
 const FIELD_GROUPS: { title: string; fields: FieldDef[] }[] = [
   {
-    title: 'Consumer & Installation',
+    title: 'Installation',
     fields: [
-      { key: 'email', label: 'Consumer Email' },
-      { key: 'aadhaarNumber', label: 'Aadhaar Number' },
       { key: 'installationDate', label: 'Installation Date', type: 'date' },
     ]
   },
@@ -106,8 +104,6 @@ export class PlantDetailsFormComponent implements OnInit {
     this.customerService.get(this.customerId()).subscribe({
       next: (c: Customer) => {
         this.form.patchValue({
-          email: c.plantEmail ?? '',
-          aadhaarNumber: c.plantAadhaarNumber ?? '',
           installationDate: c.plantInstallationDate ?? '',
           moduleWattage: c.plantModuleWattage ?? '',
           moduleCount: c.plantModuleCount ?? '',

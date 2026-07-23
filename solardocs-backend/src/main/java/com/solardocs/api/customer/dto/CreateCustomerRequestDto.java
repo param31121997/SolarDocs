@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Pattern;
 public record CreateCustomerRequestDto(
         @NotBlank String name,
         @NotBlank @Pattern(regexp = "\\d{10}") String mobile,
+        String email,
+        String aadhaarNumber,
         String addressLine,
         String village,
         String district,

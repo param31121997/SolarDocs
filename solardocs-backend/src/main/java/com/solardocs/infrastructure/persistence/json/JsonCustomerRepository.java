@@ -58,7 +58,7 @@ public class JsonCustomerRepository implements CustomerRepository {
 
                 var record = new CustomerJsonRecord(
                         customer.getId().value(), customer.getName(), customer.getMobile(),
-                        customer.getAlternateMobile(),
+                        customer.getAlternateMobile(), customer.getEmail(), customer.getAadhaarNumber(),
                         customer.getAddress() != null ? customer.getAddress().addressLine() : null,
                         customer.getAddress() != null ? customer.getAddress().village() : null,
                         customer.getAddress() != null ? customer.getAddress().district() : null,
@@ -106,6 +106,7 @@ public class JsonCustomerRepository implements CustomerRepository {
     private Customer toDomain(CustomerJsonRecord rec) {
         return Customer.rehydrate(
                 new CustomerId(rec.customerId()), rec.name(), rec.mobile(), rec.alternateMobile(),
+                rec.email(), rec.aadhaarNumber(),
                 new Address(rec.addressLine(), rec.village(), rec.district(), rec.state(), rec.pincode()),
                 rec.consumerNumber(), rec.applicationNumber(), rec.sanctionedLoadKw(), rec.plantCapacityKw(),
                 rec.discom(), rec.category(), CustomerStatus.valueOf(rec.status()), rec.archived(),
@@ -125,11 +126,11 @@ public class JsonCustomerRepository implements CustomerRepository {
     private static CustomerJsonRecord.PlantDetailsRecord toRecord(com.solardocs.domain.customer.PlantInstallationDetails d) {
         d = com.solardocs.domain.customer.PlantInstallationDetails.orEmpty(d);
         return new CustomerJsonRecord.PlantDetailsRecord(
-                d.email(), d.installationDate(), d.inverterMake(), d.inverterRating(),
+                d.installationDate(), d.inverterMake(), d.inverterRating(),
                 d.inverterCapacityKw(), d.chargeControllerType(), d.hpd(),
                 d.earthing1Ohms(), d.earthing2Ohms(), d.earthing3Ohms(),
                 d.moduleWattage(), d.moduleCount(), d.moduleCapacityKw(), d.moduleSerialNumbers(),
-                d.cellManufacturerName(), d.cellGstInvoiceNo(), d.aadhaarNumber(),
+                d.cellManufacturerName(), d.cellGstInvoiceNo(),
                 d.inspectionDate(), d.inspectionLetterNo(), d.inspectionLetterDate(),
                 d.agreementPlace(), d.netMeterSerialNo()
         );
@@ -138,11 +139,11 @@ public class JsonCustomerRepository implements CustomerRepository {
     private static com.solardocs.domain.customer.PlantInstallationDetails toDomain(CustomerJsonRecord.PlantDetailsRecord r) {
         if (r == null) return com.solardocs.domain.customer.PlantInstallationDetails.empty();
         return new com.solardocs.domain.customer.PlantInstallationDetails(
-                r.email(), r.installationDate(), r.inverterMake(), r.inverterRating(),
+                r.installationDate(), r.inverterMake(), r.inverterRating(),
                 r.inverterCapacityKw(), r.chargeControllerType(), r.hpd(),
                 r.earthing1Ohms(), r.earthing2Ohms(), r.earthing3Ohms(),
                 r.moduleWattage(), r.moduleCount(), r.moduleCapacityKw(), r.moduleSerialNumbers(),
-                r.cellManufacturerName(), r.cellGstInvoiceNo(), r.aadhaarNumber(),
+                r.cellManufacturerName(), r.cellGstInvoiceNo(),
                 r.inspectionDate(), r.inspectionLetterNo(), r.inspectionLetterDate(),
                 r.agreementPlace(), r.netMeterSerialNo()
         );

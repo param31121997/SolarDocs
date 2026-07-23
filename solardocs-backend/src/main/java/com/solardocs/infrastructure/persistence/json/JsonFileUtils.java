@@ -1,5 +1,6 @@
 package com.solardocs.infrastructure.persistence.json;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -11,9 +12,15 @@ import java.nio.file.*;
 @Component
 public class JsonFileUtils {
 
+    // FAIL_ON_UNKNOWN_PROPERTIES off on purpose: customer.json's shape has
+    // changed over time (e.g. email/aadhaarNumber moving from nested
+    // plantDetails to top-level fields). Without this, older files with
+    // now-unrecognized properties would fail to load entirely instead of
+    // just ignoring the stale field.
     private final ObjectMapper mapper = new ObjectMapper()
             .registerModule(new JavaTimeModule())
-            .enable(SerializationFeature.INDENT_OUTPUT);
+            .enable(SerializationFeature.INDENT_OUTPUT)
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     public ObjectMapper mapper() { return mapper; }
 

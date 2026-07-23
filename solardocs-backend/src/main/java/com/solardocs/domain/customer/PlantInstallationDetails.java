@@ -4,17 +4,20 @@ package com.solardocs.domain.customer;
  * Installation-specific technical facts that the compliance document set
  * (Work Completion Report, Guarantee Certificate, Annexure-I, Proforma-A,
  * DCR Declaration, Net Meter Agreement) needs, but that don't belong on
- * the core Customer record (name/address/consumer no. etc.) because
- * they're facts about the physical plant and paperwork trail, not the
- * consumer. Captured once on Customer Details, then reused by every
- * document strategy - nothing here is re-asked per document.
+ * the core Customer record because they're facts about the physical
+ * plant and paperwork trail, not the consumer's identity. Captured once
+ * on the Plant Details tab, then reused by every document strategy -
+ * nothing here is re-asked per document.
+ * <p>
+ * Consumer identity fields (email, Aadhaar number) live directly on
+ * Customer alongside name/mobile - see Customer.java - since they're
+ * facts about the person, not the installation.
  * <p>
  * Every field is a plain String kept exactly as the vendor enters it
  * (dates as free text, e.g. "14/03/2026") since these are dropped
  * straight into HTML templates with no further computation.
  */
 public record PlantInstallationDetails(
-        String email,
         String installationDate,
         String inverterMake,
         String inverterRating,
@@ -30,7 +33,6 @@ public record PlantInstallationDetails(
         String moduleSerialNumbers,
         String cellManufacturerName,
         String cellGstInvoiceNo,
-        String aadhaarNumber,
         String inspectionDate,
         String inspectionLetterNo,
         String inspectionLetterDate,
@@ -39,8 +41,7 @@ public record PlantInstallationDetails(
 ) {
     public static PlantInstallationDetails empty() {
         return new PlantInstallationDetails(
-                "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
-                "", "", "", "", "", ""
+                "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
         );
     }
 

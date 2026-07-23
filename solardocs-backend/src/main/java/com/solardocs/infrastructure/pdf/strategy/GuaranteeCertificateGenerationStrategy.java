@@ -35,8 +35,10 @@ public class GuaranteeCertificateGenerationStrategy implements DocumentGeneratio
                 "cmcYears", extraFields.getOrDefault("cmcYears", "5"),                 // yellow, default
                 // Aadhaar now lives on Customer > Plant Details, filled once and
                 // reused here - extraFields can still override it per-generation.
-                "aadhaarNumber", FieldResolver.resolve(extraFields, "aadhaarNumber", customer.getPlantDetails(),
-                        com.solardocs.domain.customer.PlantInstallationDetails::aadhaarNumber, "")
+                // Aadhaar lives directly on Customer (identity data, not a plant fact) -
+                // extraFields can still override it per-generation.
+                "aadhaarNumber", extraFields.getOrDefault("aadhaarNumber",
+                        customer.getAadhaarNumber() != null ? customer.getAadhaarNumber() : "")
         );
     }
 }

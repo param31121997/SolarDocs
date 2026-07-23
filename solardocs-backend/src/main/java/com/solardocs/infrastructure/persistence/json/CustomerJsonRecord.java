@@ -9,6 +9,8 @@ public record CustomerJsonRecord(
         String name,
         String mobile,
         String alternateMobile,
+        String email,
+        String aadhaarNumber,
         String addressLine,
         String village,
         String district,
@@ -31,13 +33,19 @@ public record CustomerJsonRecord(
     public record UploadedDocRecord(String id, String type, String fileName, String filePath, Instant uploadedAt) {}
     public record GeneratedDocRecord(String id, String templateCode, String templateVersion, String filePath, Instant generatedAt) {}
 
-    /** Mirrors domain PlantInstallationDetails - kept as a separate JSON-layer record (rather than reusing the domain type directly) so the persistence format doesn't change if the domain shape ever does. */
+    /**
+     * Mirrors domain PlantInstallationDetails - kept as a separate JSON-layer
+     * record (rather than reusing the domain type directly) so the
+     * persistence format doesn't change if the domain shape ever does.
+     * email/aadhaarNumber moved out to the top-level Customer fields above -
+     * they're consumer identity, not plant/installation facts.
+     */
     public record PlantDetailsRecord(
-            String email, String installationDate, String inverterMake, String inverterRating,
+            String installationDate, String inverterMake, String inverterRating,
             String inverterCapacityKw, String chargeControllerType, String hpd,
             String earthing1Ohms, String earthing2Ohms, String earthing3Ohms,
             String moduleWattage, String moduleCount, String moduleCapacityKw, String moduleSerialNumbers,
-            String cellManufacturerName, String cellGstInvoiceNo, String aadhaarNumber,
+            String cellManufacturerName, String cellGstInvoiceNo,
             String inspectionDate, String inspectionLetterNo, String inspectionLetterDate,
             String agreementPlace, String netMeterSerialNo
     ) {}

@@ -35,8 +35,10 @@ public class AnnexureIGenerationStrategy implements DocumentGenerationStrategy {
 
         // --- Now saved on Customer > Plant Details, filled once and reused ---
         var pd = customer.getPlantDetails();
-        model.put("email", FieldResolver.resolve(extraFields, "email", pd,
-                com.solardocs.domain.customer.PlantInstallationDetails::email, ""));
+        // Email lives directly on Customer (identity data, not a plant fact) -
+        // extraFields can still override it per-generation.
+        model.put("email", extraFields.getOrDefault("email",
+                customer.getEmail() != null ? customer.getEmail() : ""));
         model.put("installationDate", FieldResolver.resolve(extraFields, "installationDate", pd,
                 com.solardocs.domain.customer.PlantInstallationDetails::installationDate, ""));
         model.put("inverterCapacityKw", FieldResolver.resolve(extraFields, "inverterCapacityKw", pd,

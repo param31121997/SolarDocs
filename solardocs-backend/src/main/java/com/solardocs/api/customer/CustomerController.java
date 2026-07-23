@@ -33,7 +33,7 @@ public class CustomerController {
 
     @PostMapping
     public ApiResponse<CustomerResponseDto> create(@Valid @RequestBody CreateCustomerRequestDto req) {
-        Customer c = customerService.create(req.name(), req.mobile(),
+        Customer c = customerService.create(req.name(), req.mobile(), req.email(), req.aadhaarNumber(),
                 new Address(req.addressLine(), req.village(), req.district(), req.state(), req.pincode()));
         return ApiResponse.ok(customerMapper.toResponse(c));
     }
@@ -57,6 +57,7 @@ public class CustomerController {
     @PutMapping("/{id}")
     public ApiResponse<CustomerResponseDto> update(@PathVariable String id, @Valid @RequestBody UpdateCustomerRequestDto req) {
         Customer c = customerService.update(id, req.name(), req.mobile(), req.alternateMobile(),
+                req.email(), req.aadhaarNumber(),
                 new Address(req.addressLine(), req.village(), req.district(), req.state(), req.pincode()),
                 req.consumerNumber(), req.applicationNumber(), req.sanctionedLoadKw(), req.plantCapacityKw(),
                 req.discom(), req.category());
@@ -67,11 +68,11 @@ public class CustomerController {
     public ApiResponse<CustomerResponseDto> updatePlantDetails(@PathVariable String id,
                                                                  @RequestBody UpdatePlantDetailsRequestDto req) {
         var details = new com.solardocs.domain.customer.PlantInstallationDetails(
-                req.email(), req.installationDate(), req.inverterMake(), req.inverterRating(),
+                req.installationDate(), req.inverterMake(), req.inverterRating(),
                 req.inverterCapacityKw(), req.chargeControllerType(), req.hpd(),
                 req.earthing1Ohms(), req.earthing2Ohms(), req.earthing3Ohms(),
                 req.moduleWattage(), req.moduleCount(), req.moduleCapacityKw(), req.moduleSerialNumbers(),
-                req.cellManufacturerName(), req.cellGstInvoiceNo(), req.aadhaarNumber(),
+                req.cellManufacturerName(), req.cellGstInvoiceNo(),
                 req.inspectionDate(), req.inspectionLetterNo(), req.inspectionLetterDate(),
                 req.agreementPlace(), req.netMeterSerialNo()
         );

@@ -15,6 +15,8 @@ public class Customer {
     private String name;
     private String mobile;
     private String alternateMobile;
+    private String email;
+    private String aadhaarNumber;
     private Address address;
     private String consumerNumber;
     private String applicationNumber;
@@ -38,16 +40,20 @@ public class Customer {
         this.archived = false;
     }
 
-    public static Customer newCustomer(CustomerId id, String name, String mobile, Address address) {
+    public static Customer newCustomer(CustomerId id, String name, String mobile, String email,
+                                        String aadhaarNumber, Address address) {
         Customer c = new Customer(id, Instant.now());
         c.name = name;
         c.mobile = mobile;
+        c.email = email;
+        c.aadhaarNumber = aadhaarNumber;
         c.address = address;
         c.plantDetails = PlantInstallationDetails.empty();
         return c;
     }
 
     public static Customer rehydrate(CustomerId id, String name, String mobile, String alternateMobile,
+                                     String email, String aadhaarNumber,
                                      Address address, String consumerNumber, String applicationNumber,
                                      BigDecimal sanctionedLoadKw, BigDecimal plantCapacityKw,
                                      String discom, String category, CustomerStatus status, boolean archived,
@@ -59,6 +65,8 @@ public class Customer {
         customer.name = name;
         customer.mobile = mobile;
         customer.alternateMobile = alternateMobile;
+        customer.email = email;
+        customer.aadhaarNumber = aadhaarNumber;
         customer.address = address;
         customer.consumerNumber = consumerNumber;
         customer.applicationNumber = applicationNumber;
@@ -120,13 +128,16 @@ public class Customer {
         this.updatedAt = Instant.now();
     }
 
-    public void updateMasterData(String name, String mobile, String alternateMobile, Address address,
+    public void updateMasterData(String name, String mobile, String alternateMobile, String email, String aadhaarNumber,
+                                  Address address,
                                   String consumerNumber, String applicationNumber,
                                   BigDecimal sanctionedLoadKw, BigDecimal plantCapacityKw,
                                   String discom, String category) {
         this.name = name;
         this.mobile = mobile;
         this.alternateMobile = alternateMobile;
+        this.email = email;
+        this.aadhaarNumber = aadhaarNumber;
         this.address = address;
         this.consumerNumber = consumerNumber;
         this.applicationNumber = applicationNumber;
@@ -142,6 +153,8 @@ public class Customer {
     public String getName() { return name; }
     public String getMobile() { return mobile; }
     public String getAlternateMobile() { return alternateMobile; }
+    public String getEmail() { return email; }
+    public String getAadhaarNumber() { return aadhaarNumber; }
     public Address getAddress() { return address; }
     public String getConsumerNumber() { return consumerNumber; }
     public String getApplicationNumber() { return applicationNumber; }

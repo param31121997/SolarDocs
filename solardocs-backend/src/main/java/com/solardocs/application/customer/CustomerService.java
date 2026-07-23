@@ -29,9 +29,9 @@ public class CustomerService {
         this.idGenerator = idGenerator;
     }
 
-    public Customer create(String name, String mobile, Address address) {
+    public Customer create(String name, String mobile, String email, String aadhaarNumber, Address address) {
         CustomerId id = idGenerator.nextId();
-        Customer customer = Customer.newCustomer(id, name, mobile, address);
+        Customer customer = Customer.newCustomer(id, name, mobile, email, aadhaarNumber, address);
         customerRepository.save(customer);
         reindex(customer);
         return customer;
@@ -43,11 +43,12 @@ public class CustomerService {
     }
 
     public Customer update(String customerId, String name, String mobile, String alternateMobile,
+                            String email, String aadhaarNumber,
                             Address address, String consumerNumber, String applicationNumber,
                             BigDecimal sanctionedLoadKw, BigDecimal plantCapacityKw,
                             String discom, String category) {
         Customer customer = get(customerId);
-        customer.updateMasterData(name, mobile, alternateMobile, address, consumerNumber,
+        customer.updateMasterData(name, mobile, alternateMobile, email, aadhaarNumber, address, consumerNumber,
                 applicationNumber, sanctionedLoadKw, plantCapacityKw, discom, category);
         customerRepository.save(customer);
         reindex(customer);
